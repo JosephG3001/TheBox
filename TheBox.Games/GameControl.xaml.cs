@@ -17,6 +17,7 @@ using TheBox.Common.Menu;
 using TheBox.Common.Models;
 using TheBox.Games.Models;
 using TheBox.Games.Settings;
+using TheBox.Games.Modals;
 
 namespace TheBox.Games
 {
@@ -25,24 +26,25 @@ namespace TheBox.Games
     /// </summary>
     public partial class GameControl : UserControl, IBoxComponent, IBoxKeyboardControl
     {
-        /// <summary>
-        /// The _settings
-        /// </summary>
-        private GameSettingsManager _settings;
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GameControl"/> class.
         /// </summary>
         public GameControl()
         {
-            InitializeComponent();
+            // set this gameControl's datacontext to the singleton PageModel
+            this.DataContext = GameControlModel.GetInstance;
 
             // initialise the GameControlModel singleton.
             new GameControlModel(this.Dispatcher, this.ComponentName);
 
-            // set this gameControl's datacontext to the singleton gameControlModel
-            this.DataContext = GameControlModel.GetInstance;
+            InitializeComponent();
+
+
         }
+
+        #endregion Constructors
 
         #region IBoxComponent implementation
 
@@ -51,7 +53,12 @@ namespace TheBox.Games
         /// </summary>
         public void ActivateComponent()
         {
-            
+            // check if we have emulators configured
+            if (GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList == null)
+            {
+                ModalModel.GetInstance.ModalUserControl = new NoEmulatorsConfiguredModal();
+                return;
+            }
         }
 
         /// <summary>
@@ -77,9 +84,9 @@ namespace TheBox.Games
             });
 
             // add menu items for each of the saved emulator settings
-            if (_settings.EmulatorSettings.EmulatorSettingList != null)
+            if (GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList != null)
             {
-                foreach (var setting in _settings.EmulatorSettings.EmulatorSettingList)
+                foreach (var setting in GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList)
                 {
                     menuItems.Add(new MenuItemModel()
                     {

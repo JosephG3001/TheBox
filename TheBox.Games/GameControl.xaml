@@ -5,8 +5,45 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TheBox.Games"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid >
+             d:DesignHeight="600" d:DesignWidth="1000"
+             xmlns:CommonControls="clr-namespace:TheBox.Common.Controls;assembly=TheBox.Common">
+    
+    
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="15*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <CommonControls:BreadCrumbControl ></CommonControls:BreadCrumbControl>
+
+        <Grid Grid.Row="1" Margin="10,0,10,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <CommonControls:PageControl ></CommonControls:PageControl>
+
+
+            <Grid Grid.Column="1" Margin="15, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" >
+
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="0,5,0,0">
+   
+                </Grid>
+            </Grid>
+
+        </Grid>
+        
         
     </Grid>
 </UserControl>

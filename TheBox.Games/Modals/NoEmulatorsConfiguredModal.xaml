@@ -7,6 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+        <Viewbox >
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <TextBlock HorizontalAlignment="Center" FontSize="20" Margin="20" Foreground="White" Text="Nothing Configured"></TextBlock>
+                <TextBlock HorizontalAlignment="Center" Margin="20" Foreground="White" Text="No Emulators or Games have been configured"></TextBlock>
+            </StackPanel>
+        </Viewbox>
     </Grid>
 </UserControl>

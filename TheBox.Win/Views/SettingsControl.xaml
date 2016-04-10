@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:TheBox.Win.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-             xmlns:UI="clr-namespace:TheBox.Common.UI;assembly=TheBox.Common">
+             xmlns:UI="clr-namespace:TheBox.Common.UI;assembly=TheBox.Common"
+             xmlns:CommonControls="clr-namespace:TheBox.Common.Controls;assembly=TheBox.Common">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -22,11 +23,7 @@
             <RowDefinition Height="15*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Grid HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10">
-            <Viewbox Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <TextBlock FontFamily="Consolas" Text="{Binding BreadCumbs}" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-            </Viewbox>
-        </Grid>
+        <CommonControls:BreadCrumbControl ></CommonControls:BreadCrumbControl>
 
         <Grid Grid.Row="1" Margin="10,0,10,15">
             <Grid.ColumnDefinitions>
@@ -34,43 +31,7 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <ListView Background="Transparent" Grid.Column="0" ItemsSource="{Binding VisibleMenuItemModels}"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch" 
-                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                      BorderThickness="0">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <UI:IBoxMenuButton Content="{Binding DisplayText}" 
-                                           Odd="{Binding Odd}" 
-                                           IsSelected="{Binding IsSelected}" 
-                                           ParentSelected="{Binding ParentSelected}" 
-                                           Command="{Binding RelayCommand}" 
-                                           Visibility="{Binding IsVisible, Converter={StaticResource BoolToCollapseConverter}}"
-                                           Margin="1">
-                        </UI:IBoxMenuButton>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Rows="12" Columns="1"
-                                     Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}" />
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                    <ContentPresenter />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
+            <CommonControls:PageControl ></CommonControls:PageControl>
 
         </Grid>
 

@@ -58,8 +58,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\BreadCrumbControl.xaml.cs">
+      <DependentUpon>BreadCrumbControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\IBoxProgressBar.xaml.cs">
       <DependentUpon>IBoxProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PageControl.xaml.cs">
+      <DependentUpon>PageControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToCollapseConverter.cs" />
     <Compile Include="Extentions.cs" />
@@ -119,7 +125,15 @@
     <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\BreadCrumbControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\IBoxProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PageControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -6,7 +6,6 @@
     <Converters:BoolToCollapseConverter x:Key="BoolToCollapseConverter" />
 
     <ResourceDictionary.MergedDictionaries>
-
         <ResourceDictionary Source="pack://application:,,,/TheBox.Common;component/Styles/Generics.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

@@ -35,6 +35,37 @@ namespace TheBox.Win
 
             // set the pagination stackPanels datacontext to the Pagemodel singleton
             this.PaginationStackPanel.DataContext = PageModel.GetInstance;
+
+            // bind property changed of the model
+            MainWindowModel.GetInstance.PropertyChanged += GetInstance_PropertyChanged;
+        }
+
+        /// <summary>
+        /// Handles the PropertyChanged event of the main window model.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
+        private void GetInstance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsFullScreen")
+            {
+                if (MainWindowModel.GetInstance.IsFullScreen)
+                {
+                    // Full screen
+                    this.WindowState = WindowState.Maximized;
+                    this.WindowStyle = WindowStyle.None;
+                    this.ResizeMode = ResizeMode.NoResize;
+                    MainWindowModel.GetInstance.MouseCursor = Cursors.None;
+                }
+                else
+                {
+                    // Window
+                    this.WindowState = WindowState.Normal;
+                    this.WindowStyle = WindowStyle.SingleBorderWindow;
+                    this.ResizeMode = ResizeMode.CanResize;
+                    MainWindowModel.GetInstance.MouseCursor = Cursors.Arrow;
+                }
+            }
         }
 
         /// <summary>

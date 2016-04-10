@@ -51,6 +51,9 @@ namespace TheBox.Games.Models
         /// </summary>
         public GameControlModel(Dispatcher dispatcher, string componentName)
         {
+            // set the singleton to this instance
+            _instance = this;
+
             // store parameters
             this._componentName = componentName;
             this._dispatcher = dispatcher;

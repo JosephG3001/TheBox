@@ -30,6 +30,8 @@ namespace TheBox.Movies
     /// </summary>
     public partial class MovieControl : UserControl, IBoxComponent, IBoxKeyboardControl
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MovieControl"/> class.
         /// </summary>
@@ -66,6 +68,8 @@ namespace TheBox.Movies
             // initialise media models
             new MediaPlayerModel(axWmp);
         }
+
+        #endregion Constructors
 
         /// <summary>
         /// Handles the CacheLoadingComplete event of the FileCacheManager control.

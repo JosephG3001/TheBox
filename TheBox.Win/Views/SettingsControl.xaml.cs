@@ -106,8 +106,11 @@ namespace TheBox.Win.Views
             {
                 PageModel.GetInstance.NavigateBackwards();
 
-                // leaving the settings menu so hide the mouse cursor
-                MainWindowModel.GetInstance.MouseCursor = Cursors.None;
+                if (PageModel.GetInstance.MenuEntityModel == null)
+                {
+                    // leaving the settings menu so hide the mouse cursor
+                    MainWindowModel.GetInstance.MouseCursor = Cursors.None;
+                }
             }
 
             // up

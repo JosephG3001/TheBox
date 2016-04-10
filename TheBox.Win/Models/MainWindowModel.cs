@@ -51,6 +51,11 @@ namespace TheBox.Win.Models
         #region Private Members
 
         /// <summary>
+        /// The _is full screen
+        /// </summary>
+        private bool _isFullScreen;
+
+        /// <summary>
         /// The _is selected
         /// </summary>
         private bool _isTopMenuSelected;
@@ -95,6 +100,19 @@ namespace TheBox.Win.Models
         #endregion Contructors
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is full screen.
+        /// </summary>
+        public bool IsFullScreen
+        {
+            get { return _isFullScreen; }
+            set
+            {
+                _isFullScreen = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
@@ -188,6 +206,9 @@ namespace TheBox.Win.Models
             // new model
             MainWindowModel model = new MainWindowModel();
 
+            // full screen by default
+            model.IsFullScreen = true;
+
             // new topMenuItems observable collection
             model.TopMenuItemModels = new ObservableCollection<TopMenuItemModel>();
 
@@ -201,6 +222,9 @@ namespace TheBox.Win.Models
             // Add the settings button & initialise settings control
             IBoxKeyboardControl settingsControl = new SettingsControl();
             model.TopMenuItemModels.Add(new TopMenuItemModel((IBoxComponent)settingsControl, "Settings", () => { }, "appbar_cog", model.TopMenuItemModels.Count + 1));
+
+            // Add the toggle fullscreen button
+            model.TopMenuItemModels.Add(new TopMenuItemModel(null, "Fullscreen", () => { model.IsFullScreen = !model.IsFullScreen; }, "appbar_fullscreen_box", model.TopMenuItemModels.Count + 1));
 
             // Add the close button
             model.TopMenuItemModels.Add(new TopMenuItemModel(null, "Close", () => { Application.Current.Shutdown(); }, "appbar_door_leave", model.TopMenuItemModels.Count + 1));
