@@ -174,13 +174,10 @@ namespace TheBox.Win.Models
         /// </summary>
         public ObservableCollection<TopMenuItemModel> TopMenuItemModels
         {
-            get;
-            private set;
+            get; private set;
         }
 
         #endregion Public Properties
-
-
 
         #region PageModel Bound Events
 

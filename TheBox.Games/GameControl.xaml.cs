@@ -26,6 +26,23 @@ namespace TheBox.Games
     /// </summary>
     public partial class GameControl : UserControl, IBoxComponent, IBoxKeyboardControl
     {
+        #region Singleton
+
+        /// <summary>
+        /// The _instance
+        /// </summary>
+        private static GameControl _instance;
+
+        /// <summary>
+        /// Gets the get instance.
+        /// </summary>
+        public static GameControl GetInstance
+        {
+            get { return _instance; }
+        }
+
+        #endregion Singleton
+
         #region Constructors
 
         /// <summary>
@@ -33,6 +50,9 @@ namespace TheBox.Games
         /// </summary>
         public GameControl()
         {
+            // set this instance as the singleton
+            _instance = this;
+
             // set this gameControl's datacontext to the singleton PageModel
             this.DataContext = GameControlModel.GetInstance;
 
@@ -40,7 +60,6 @@ namespace TheBox.Games
             new GameControlModel(this.Dispatcher, this.ComponentName);
 
             InitializeComponent();
-
 
         }
 
@@ -94,7 +113,8 @@ namespace TheBox.Games
                         ParentSelected = true,
                         RelayCommand = new RelayCommand(() =>
                         {
-
+                            ModalModel.GetInstance.ModalUserControl = new EmulatorSettingModal();
+                            PageModel.GetInstance.UnSelectPageModel();
                         })
                     });
                 }

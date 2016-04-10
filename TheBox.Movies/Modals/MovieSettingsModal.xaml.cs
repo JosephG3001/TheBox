@@ -41,26 +41,38 @@ namespace TheBox.Movies
             // backspace
             if (e.Key == Key.Back)
             {
-                // remove the modal
-                ModalModel.GetInstance.ModalUserControl = null;
-
-                // change page buttons back to gold
-                PageModel.GetInstance.SelectPageModel();
+                // emulate the cancel button click (hide modal and go back to menu)
+                btnCancel_Click(this, new RoutedEventArgs());
             }
 
-            // enter
-            if (e.Key == Key.Enter)
-            {
-                // update the model and save
-                MovieControlModel.GetInstance.MovieSettingsManager.MovieSettings.RootMediaPath = txtMediaRoot.Text.SafeTrim();
-                MovieControlModel.GetInstance.MovieSettingsManager.SaveSettings();
+            //// enter
+            //if (e.Key == Key.Enter)
+            //{
+            //    // emulate the save button click
+            //    btnSave_Click(this, new RoutedEventArgs());
+            //}
+        }
 
-                // remove the modal
-                ModalModel.GetInstance.ModalUserControl = null;
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            // update the model and save
+            MovieControlModel.GetInstance.MovieSettingsManager.MovieSettings.RootMediaPath = txtMediaRoot.Text.SafeTrim();
+            MovieControlModel.GetInstance.MovieSettingsManager.SaveSettings();
 
-                // change page buttons back to gold
-                PageModel.GetInstance.SelectPageModel();
-            }
+            // remove the modal
+            ModalModel.GetInstance.ModalUserControl = null;
+
+            // change page buttons back to gold
+            PageModel.GetInstance.SelectPageModel();
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            // remove the modal
+            ModalModel.GetInstance.ModalUserControl = null;
+
+            // change page buttons back to gold
+            PageModel.GetInstance.SelectPageModel();
         }
     }
 }
