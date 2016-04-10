@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TheBox.Movies"
+                    xmlns:Converters="clr-namespace:TheBox.Common.Converters;assembly=TheBox.Common">
+
+    <Converters:BoolToCollapseConverter x:Key="BoolToCollapseConverter" />
+
+    <ResourceDictionary.MergedDictionaries>
+
+        <ResourceDictionary Source="pack://application:,,,/TheBox.Common;component/Styles/Generics.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

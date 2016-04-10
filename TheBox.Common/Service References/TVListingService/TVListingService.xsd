@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/TVListingsAPI" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/TVListingsAPI" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="TVSchedule">
+    <xs:sequence>
+      <xs:element name="Providers" nillable="true" type="tns:ArrayOfTVProvider" />
+      <xs:element name="ScheduleDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TVSchedule" nillable="true" type="tns:TVSchedule" />
+  <xs:complexType name="ArrayOfTVProvider">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TVProvider" nillable="true" type="tns:TVProvider" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTVProvider" nillable="true" type="tns:ArrayOfTVProvider" />
+  <xs:complexType name="TVProvider">
+    <xs:sequence>
+      <xs:element name="Channels" nillable="true" type="tns:ArrayOfChannel" />
+      <xs:element name="ProviderName" nillable="true" type="xs:string" />
+      <xs:element name="ServiceId" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TVProvider" nillable="true" type="tns:TVProvider" />
+  <xs:complexType name="ArrayOfChannel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Channel" nillable="true" type="tns:Channel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfChannel" nillable="true" type="tns:ArrayOfChannel" />
+  <xs:complexType name="Channel">
+    <xs:sequence>
+      <xs:element name="ChannelNumber" nillable="true" type="xs:string" />
+      <xs:element name="Name" nillable="true" type="xs:string" />
+      <xs:element name="Programmes" nillable="true" type="tns:ArrayOfProgramme" />
+      <xs:element name="ServiceId" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Channel" nillable="true" type="tns:Channel" />
+  <xs:complexType name="ArrayOfProgramme">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Programme" nillable="true" type="tns:Programme" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProgramme" nillable="true" type="tns:ArrayOfProgramme" />
+  <xs:complexType name="Programme">
+    <xs:sequence>
+      <xs:element name="_x003C_ChannelName_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_ChannelNumber_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_ProgramName_x003E_k__BackingField" nillable="true" type="xs:string" />
+      <xs:element name="_x003C_ShowingTime_x003E_k__BackingField" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Programme" nillable="true" type="tns:Programme" />
+</xs:schema>

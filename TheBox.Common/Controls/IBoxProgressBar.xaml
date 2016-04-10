@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="TheBox.Common.Controls.IBoxProgressBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TheBox.Common.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    
+    <Grid x:Name="rootGrid" Background="Silver">
+        <Grid x:Name="BarGrid" HorizontalAlignment="Left" >
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFFFE439" Offset="0.432"/>
+                    <GradientStop Color="#FFEED912" Offset="0.552"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+        </Grid>
+    </Grid>
+</UserControl>

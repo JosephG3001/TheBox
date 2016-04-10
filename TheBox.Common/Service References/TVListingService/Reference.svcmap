@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="669389aa-1b90-43eb-8d54-738a248f5680" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:6288/TV/TVListingService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="TVListingService.xsd" MetadataType="Schema" ID="017fad7d-bf3b-4a79-b1ed-ee461de85a12" SourceId="1" SourceUrl="http://localhost:6288/TV/TVListingService.svc?xsd=xsd2" />
+    <MetadataFile FileName="TVListingService.disco" MetadataType="Disco" ID="416a5b48-e786-440c-bb4c-58ce9b13a559" SourceId="1" SourceUrl="http://localhost:6288/TV/TVListingService.svc?disco" />
+    <MetadataFile FileName="TVListingService1.xsd" MetadataType="Schema" ID="056c7a80-98af-4a46-b4a1-5e16c6c3908f" SourceId="1" SourceUrl="http://localhost:6288/TV/TVListingService.svc?xsd=xsd1" />
+    <MetadataFile FileName="TVListingService.wsdl" MetadataType="Wsdl" ID="cd05f833-a04e-4e3b-b244-ddac72a446dd" SourceId="1" SourceUrl="http://localhost:6288/TV/TVListingService.svc?wsdl" />
+    <MetadataFile FileName="TVListingService2.xsd" MetadataType="Schema" ID="0a31ce87-63bc-4044-8037-138014be3181" SourceId="1" SourceUrl="http://localhost:6288/TV/TVListingService.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

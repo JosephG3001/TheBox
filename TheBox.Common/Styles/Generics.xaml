@@ -1,0 +1,196 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Local="clr-namepsace:TheBox.Common"
+                    xmlns:UI="clr-namespace:TheBox.Common.UI">
+
+
+
+    <SolidColorBrush x:Key="DefaultBackground" Color="#FF000415" />
+    <SolidColorBrush x:Key="DefaultBlue" Color="#FF081749" />
+    <SolidColorBrush x:Key="SpinnerColour" Color="#FF4D4DF9" />
+
+
+    <!-- top menu button (blue) -->
+    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="TopButtonColour">
+        <LinearGradientBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform Angle="62.65" CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#FF171B74" Offset="0.468"/>
+        <GradientStop Color="#FF0C1E61" Offset="0.546"/>
+    </LinearGradientBrush>
+
+    <!-- top menu button hover (gold) -->
+    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="TopButtonHoverColour">
+        <LinearGradientBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform Angle="62.65" CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#FFF3EA26" Offset="0.468"/>
+        <GradientStop Color="#FFFFDC00" Offset="0.546"/>
+    </LinearGradientBrush>
+
+    <!-- top menu button hover (silver) -->
+    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="TopButtonHoverNotSelectedColour">
+        <LinearGradientBrush.RelativeTransform>
+            <TransformGroup>
+                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                <RotateTransform Angle="62.65" CenterY="0.5" CenterX="0.5"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#FFA4A4A4" Offset="0.468"/>
+        <GradientStop Color="#FFB0B0B0" Offset="0.546"/>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="TopButtonIconColour" Color="#FFDEDEDE" />
+    <SolidColorBrush x:Key="TopButtonIconHoverColour" Color="Blue" />
+
+
+    <Style TargetType="{x:Type UI:MetroButtonWithIcon}" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+        <Setter Property="Background" Value="{StaticResource TopButtonColour}" />
+        <Setter Property="Foreground" Value="{StaticResource TopButtonIconColour}" />
+        <Setter Property="IconColour" Value="{StaticResource TopButtonIconColour}" />
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="BorderBrush" Value="#00000000"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type UI:MetroButtonWithIcon}">
+                    <Grid Name="ButtonGrid" Background="{TemplateBinding Background}" HorizontalAlignment="Stretch">
+                        <Viewbox HorizontalAlignment="Center">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
+                                <Rectangle x:Name="ButtonRectangle" Fill="{TemplateBinding IconColour}" HorizontalAlignment="Center" Width="20" Height="20" Margin="5">
+                                    <Rectangle.OpacityMask>
+                                        <VisualBrush Stretch="Uniform" Visual="{Binding Visual, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                                <TextBlock Text="{TemplateBinding Content}" FontSize="8" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Viewbox>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <!-- Gold -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="ParentSelected" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource TopButtonHoverColour}" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="IconColour" Value="Black" />
+            </MultiTrigger>
+            <!-- Silver -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="ParentSelected" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource TopButtonHoverNotSelectedColour}" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="IconColour" Value="Black" />
+            </MultiTrigger>
+            <!-- Mouse -->
+            <!--<Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource TopButtonHoverColour}" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="IconColour" Value="Black" />
+            </Trigger>-->
+        </Style.Triggers>
+    </Style>
+
+
+
+
+
+
+
+
+    <!-- menu button (blue) -->
+    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="MenuButtonColour">
+        <GradientStop Color="#FF0A0E55" Offset="0.468"/>
+        <GradientStop Color="#FF081749" Offset="0.546"/>
+    </LinearGradientBrush>
+
+    <!-- menu button (blue) odd -->
+    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="MenuButtonColourOdd">
+        <GradientStop Color="#FF10145B" Offset="0.468"/>
+        <GradientStop Color="#FF051653" Offset="0.546"/>
+    </LinearGradientBrush>
+
+    <!-- menu button hover (gold) -->
+    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="MenuButtonHoverColour">
+        <GradientStop Color="#FFE4DA18" Offset="0.468"/>
+        <GradientStop Color="#FFEACA00" Offset="0.546"/>
+    </LinearGradientBrush>
+
+    <!-- menu button hover (silver) -->
+    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="MenuButtonHoverNotSelectedColour">
+        <GradientStop Color="#FFA4A4A4" Offset="0.468"/>
+        <GradientStop Color="#FFB0B0B0" Offset="0.546"/>
+    </LinearGradientBrush>
+
+    <Style TargetType="{x:Type UI:IBoxMenuButton}" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+        <Setter Property="Background" Value="{StaticResource MenuButtonColour}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type UI:IBoxMenuButton}">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{TemplateBinding Background}" Margin="2">
+                        <Grid HorizontalAlignment="Left">
+                            <Viewbox HorizontalAlignment="Stretch">
+                                <TextBlock Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Left" Margin="4" Text="{TemplateBinding Content}" />
+                            </Viewbox>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Odd" Value="True">
+                <Setter Property="Background" Value="{StaticResource MenuButtonColourOdd}" />
+            </Trigger>
+            <!-- Gold -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="ParentSelected" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource MenuButtonHoverColour}" />
+                <Setter Property="Foreground" Value="Black" />
+            </MultiTrigger>
+            <!-- Silver -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="ParentSelected" Value="False" />
+                </MultiTrigger.Conditions>
+                <Setter Property="Background" Value="{StaticResource MenuButtonHoverNotSelectedColour}" />
+                <Setter Property="Foreground" Value="Black" />
+            </MultiTrigger>
+            <!-- Mouse -->
+            <!--<Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource MenuButtonHoverColour}" />
+                <Setter Property="Foreground" Value="Black" />
+            </Trigger>-->
+        </Style.Triggers>
+    </Style>
+
+
+
+
+ 
+    
+
+</ResourceDictionary>
