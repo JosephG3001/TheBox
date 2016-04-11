@@ -105,8 +105,9 @@
             </Viewbox>
         </Grid>
 
-
-        <Views:ModalControl Grid.ColumnSpan="5" Grid.RowSpan="5"></Views:ModalControl>
+        <Grid Grid.ColumnSpan="5" Grid.RowSpan="5">
+            <Views:ModalControl></Views:ModalControl>
+        </Grid>
 
     </Grid>
 </Window>
