@@ -73,5 +73,15 @@ namespace TheBox.Games.Models
         }
 
 
+        private string _currentEmulatorImage;
+        public string CurrentEmulatorImage
+        {
+            get { return _currentEmulatorImage; }
+            set
+            {
+                _currentEmulatorImage = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

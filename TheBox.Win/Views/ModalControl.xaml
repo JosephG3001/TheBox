@@ -11,12 +11,12 @@
     <Grid Background="#77000000" x:Name="ModalBackdrop" Visibility="{Binding ModalVisible, Converter={StaticResource BoolToCollapseConverter}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="4*" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Border CornerRadius="15" Grid.Row="1" Grid.Column="1" Background="{StaticResource MenuButtonColour}">

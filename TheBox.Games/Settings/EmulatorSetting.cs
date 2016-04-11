@@ -24,5 +24,11 @@ namespace TheBox.Games.Settings
 
         [XmlElement("BootCommand")]
         public string BootCommand;
+
+        [XmlElement("FileExt")]
+        public string FileExt;
+
+        [XmlElement("EmulatorPath")]
+        public string EmulatorPath;
     }
 }

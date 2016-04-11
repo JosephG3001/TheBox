@@ -43,6 +43,8 @@ namespace TheBox.Win.Views
         /// </summary>
         public void ActivateComponent()
         {
+            PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);
+
             // We've hit the settings screen so show the mouse cursor
             MainWindowModel.GetInstance.MouseCursor = Cursors.Arrow;
 

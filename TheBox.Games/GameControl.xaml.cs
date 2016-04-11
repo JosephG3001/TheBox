@@ -18,6 +18,8 @@ using TheBox.Common.Models;
 using TheBox.Games.Models;
 using TheBox.Games.Settings;
 using TheBox.Games.Modals;
+using System.IO;
+using System.Diagnostics;
 
 namespace TheBox.Games
 {
@@ -50,17 +52,21 @@ namespace TheBox.Games
         /// </summary>
         public GameControl()
         {
+            // set the model to page model
+            this.DataContext = PageModel.GetInstance;
+
             // set this instance as the singleton
             _instance = this;
 
-            // set this gameControl's datacontext to the singleton PageModel
-            this.DataContext = GameControlModel.GetInstance;
+
 
             // initialise the GameControlModel singleton.
             new GameControlModel(this.Dispatcher, this.ComponentName);
 
             InitializeComponent();
 
+            // set this gameControl's datacontext to the singleton PageModel
+            this.ImageGrid.DataContext = GameControlModel.GetInstance;
         }
 
         #endregion Constructors
@@ -72,12 +78,49 @@ namespace TheBox.Games
         /// </summary>
         public void ActivateComponent()
         {
+            PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);
+
             // check if we have emulators configured
-            if (GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList == null)
+            if (GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList == null ||
+                GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList.Count() == 0)
             {
                 ModalModel.GetInstance.ModalUserControl = new NoEmulatorsConfiguredModal();
                 return;
             }
+
+            // ** display list of emulators
+
+            // new list of menuitems
+            List<MenuItemModel> menuItems = new List<MenuItemModel>();
+
+            // get configured list of emulators
+            List<EmulatorSetting> settings = GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList.ToList();
+
+            foreach (EmulatorSetting setting in settings)
+            {
+                menuItems.Add(new MenuItemModel()
+                {
+                    DisplayText = setting.EmulatatedSystemName,
+                    IsSelected = false,
+                    IsVisible = true,
+                    ParentSelected = true,
+                    Tag = setting,
+                    RelayCommand = new RelayCommand(() =>
+                    {
+                        NavigateToRoms(setting);
+                    })
+                });
+            }
+
+            // select the first item
+            menuItems.First().IsSelected = true;
+
+            // navigate to the new emulator list
+            PageModel.GetInstance.NavigateForwards(menuItems);
+
+            ShowSystemImage();
+
+            PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);
         }
 
         /// <summary>
@@ -149,7 +192,7 @@ namespace TheBox.Games
         /// <returns></returns>
         public UserControl GetUserControl()
         {
-            return this;  
+            return this;
         }
 
         #endregion IBoxComponent implementation
@@ -168,8 +211,148 @@ namespace TheBox.Games
             {
                 PageModel.GetInstance.NavigateBackwards();
             }
+
+            // up
+            if (e.Key == Key.Up)
+            {
+                PageModel.GetInstance.MoveUp();
+                PageModel.GetInstance.BindItems();
+                PageModel.GetInstance.UpdatePaginationLabels();
+
+                if (PageModel.GetInstance.SelectedMenuItemModel.FilePath == null)
+                {
+                    ShowSystemImage();
+                }
+                else
+                {
+                    ShowGameImage();
+                }
+            }
+
+            // down
+            if (e.Key == Key.Down)
+            {
+                PageModel.GetInstance.MoveDown();
+                PageModel.GetInstance.BindItems();
+                PageModel.GetInstance.UpdatePaginationLabels();
+
+                if (PageModel.GetInstance.SelectedMenuItemModel.FilePath == null)
+                {
+                    ShowSystemImage();
+                }
+                else
+                {
+                    ShowGameImage();
+                }
+            }
+
+            // enter
+            if (e.Key == Key.Enter)
+            {
+                MenuItemModel selectedItemModel = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
+                if (selectedItemModel.FilePath == null)
+                {
+                    selectedItemModel.RelayCommand.action();
+                }
+                else
+                {
+                    selectedItemModel.RelayCommand.action();
+                }
+            }
+            PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);
         }
 
+
+
         #endregion IBoxKeyboardControl implementation
+
+        /// <summary>
+        /// Shows the game image.
+        /// </summary>
+        private void ShowGameImage()
+        {
+            // TODO: grab first game image from google or something
+        }
+
+        /// <summary>
+        /// Shows the system image.
+        /// </summary>
+        private void ShowSystemImage()
+        {
+            // Show the game system image
+            GameControlModel.GetInstance.CurrentEmulatorImage = ((EmulatorSetting)PageModel.GetInstance.SelectedMenuItemModel.Tag).ConsoleImagePath;
+        }
+
+        /// <summary>
+        /// Navigates to roms.
+        /// </summary>
+        /// <param name="setting">The setting.</param>
+        private void NavigateToRoms(EmulatorSetting setting)
+        {
+            // menu items for new menu entity
+            List<MenuItemModel> menuItems = new List<MenuItemModel>();
+
+            // get file extensions
+            string[] extensions = setting.FileExt.Split(',').ToArray();
+
+            foreach (string ext in extensions)
+            {
+                // get a list of roms from the directory
+                List<string> files = Directory.GetFiles(setting.RomPath, "*." + ext).ToList();
+
+                foreach (string file in files)
+                {
+                    menuItems.Add(new MenuItemModel()
+                    {
+                        DisplayText = System.IO.Path.GetFileNameWithoutExtension(file),
+                        ParentSelected = true,
+                        FilePath = file,
+                        RelayCommand = new RelayCommand(() =>
+                        {
+                            RunEmulator(setting, file);
+                        })
+                    });
+                }
+            }
+
+            // sort the games
+            menuItems = menuItems.OrderBy(m => m.DisplayText).ToList();
+
+            // select the first menu item
+            if (menuItems.Count > 0)
+            {
+                menuItems.First().IsSelected = true;
+            }
+
+            // navigate to new menu
+            PageModel.GetInstance.NavigateForwards(menuItems);
+        }
+
+        /// <summary>
+        /// Runs the emulator.
+        /// </summary>
+        /// <param name="setting">The setting.</param>
+        /// <param name="file">The file.</param>
+        private void RunEmulator(EmulatorSetting setting, string file)
+        {
+
+            // ** example: this starts goldeneye
+            //p.StartInfo.FileName = @"D:\emu\1964_085_60fps\originals\1964_ultrafast_v3\1964_ultrafast original.exe";
+            //p.StartInfo.Arguments = "-g \"D:\\emu\\Games_N64\\007_GoldenEye.v64\"";
+
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = setting.EmulatorPath;
+                p.StartInfo.Arguments = string.Format(setting.BootCommand, file);
+                p.StartInfo.UseShellExecute = true;
+                p.Start();
+            }
+            catch (Exception ex)
+            {
+                // TODO: show Modal error loading the emulator
+                //throw;
+            }
+        }
     }
 }

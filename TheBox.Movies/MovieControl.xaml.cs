@@ -101,6 +101,7 @@ namespace TheBox.Movies
         public void ActivateComponent()
         {
             // this is where we will populate the video files or media root
+            PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);
 
             // is the media setting ok?
             if (!MovieControlModel.GetInstance.CheckMediaPath())

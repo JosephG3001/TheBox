@@ -32,15 +32,20 @@ namespace TheBox.Games
             InitializeComponent();
 
             // check the text of the selected page menu button.  If it is not "Add New Emulator" then get the setting
-            string selectedButtonText = PageModel.GetInstance.SelectedMenuItemModel.DisplayText;
-            EmulatorSetting setting = GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList.Where(m => m.EmulatatedSystemName == selectedButtonText).FirstOrDefault();
-
-            if (setting != null)
+            if (GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList != null)
             {
-                txtImagePath.Text = setting.ConsoleImagePath;
-                txtRomPath.Text = setting.RomPath;
-                txtRunCommand.Text = setting.BootCommand;
-                txtSystemName.Text = setting.EmulatatedSystemName;
+                string selectedButtonText = PageModel.GetInstance.SelectedMenuItemModel.DisplayText;
+                EmulatorSetting setting = GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList.Where(m => m.EmulatatedSystemName == selectedButtonText).FirstOrDefault();
+
+                if (setting != null)
+                {
+                    txtImagePath.Text = setting.ConsoleImagePath;
+                    txtRomPath.Text = setting.RomPath;
+                    txtRunCommand.Text = setting.BootCommand;
+                    txtSystemName.Text = setting.EmulatatedSystemName;
+                    txtFileExt.Text = setting.FileExt;
+                    txtEmulatorPath.Text = setting.EmulatorPath;
+                }
             }
         }
 
@@ -94,6 +99,8 @@ namespace TheBox.Games
             setting.ConsoleImagePath = txtImagePath.Text;
             setting.EmulatatedSystemName = txtSystemName.Text;
             setting.RomPath = txtRomPath.Text;
+            setting.FileExt = txtFileExt.Text;
+            setting.EmulatorPath = txtEmulatorPath.Text;
 
             // convert the settings back to array sorted by system name
             GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList = settings.OrderBy(m => m.EmulatatedSystemName).ToArray();
