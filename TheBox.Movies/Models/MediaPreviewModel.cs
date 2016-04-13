@@ -44,7 +44,7 @@ namespace TheBox.Movies.Models
         /// </summary>
         /// <remarks>
         /// Implemented in such as way that only one thread should be loading a video file.
-        /// Subsequent threads will cancel all previous threads as we don;t want to thrash the hard drive.
+        /// Subsequent threads will cancel all previous threads as we don't want to thrash the hard drive.
         /// </remarks>
         public void PreviewMedia(bool stopPreview)
         {

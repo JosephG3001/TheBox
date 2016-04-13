@@ -178,7 +178,7 @@ namespace TheBox.Movies.Models
                     }
                     catch
                     {
-                        Thread.Sleep(10);
+                        Thread.Sleep(20);
                     }
                 }
 
@@ -194,7 +194,7 @@ namespace TheBox.Movies.Models
                 // Fix bug where pressing play too quick goes back to non-full screen.
 
                 // Sleep for a bit.
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
 
                 SetToFullScreen();
 
@@ -215,7 +215,7 @@ namespace TheBox.Movies.Models
         private void SetToFullScreen()
         {
             bool crashing = true;
-            while (crashing)
+            while (crashing || this.MediaPlayer.fullScreen == false)
             {
                 try
                 {
@@ -224,7 +224,7 @@ namespace TheBox.Movies.Models
                 }
                 catch
                 {
-                    Thread.Sleep(10);
+                    Thread.Sleep(100);
                 }
             }
         }
@@ -278,7 +278,7 @@ namespace TheBox.Movies.Models
             while (PageModel.GetInstance.MenuEntityModel.SelectedMenuItemModel.FilePath == null)
             {
                 MoveToNextFile();
-                Thread.Sleep(10);
+                Thread.Sleep(20);
             }
         }
 
@@ -329,7 +329,7 @@ namespace TheBox.Movies.Models
                 case 1:    // Stopped
                     Task.Run(() => 
                     {
-                        Thread.Sleep(500);
+                        Thread.Sleep(1000);
                         if (_playOptions == PlayOptions.PlayAll || _playOptions == PlayOptions.Shuffle)
                         {
                             Application.Current.Dispatcher.Invoke(RunAutoPlaySequence);
