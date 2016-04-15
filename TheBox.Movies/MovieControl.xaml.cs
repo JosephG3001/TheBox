@@ -52,8 +52,8 @@ namespace TheBox.Movies
 
 
             // Create the interop host control.
-            System.Windows.Forms.Integration.WindowsFormsHost host =
-                 new System.Windows.Forms.Integration.WindowsFormsHost();
+            System.Windows.Forms.Integration.WindowsFormsHost host = new System.Windows.Forms.Integration.WindowsFormsHost();
+            host.Focusable = false;
 
             // Create the ActiveX control.
             AxWMPLib.AxWindowsMediaPlayer axWmp = new AxWMPLib.AxWindowsMediaPlayer();

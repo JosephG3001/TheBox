@@ -62,6 +62,11 @@ namespace TheBox.Movies.Models
         public bool BlockKeyPresses { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether [user pressed stop].
+        /// </summary>
+        public bool UserPressedStop { get; private set; }
+
+        /// <summary>
         /// The current play option selected - will be set back to play when a user presses stop to prevent
         /// the auto play sequence from previewing another file
         /// </summary>
@@ -159,6 +164,8 @@ namespace TheBox.Movies.Models
         /// </summary>
         public void PlayMediaFullScreen(PlayOptions playOption)
         {
+            UserPressedStop = false;
+
             _mediaPreviewModel.CancelPreviews();
             _playOptions = playOption;
 
@@ -215,10 +222,15 @@ namespace TheBox.Movies.Models
         private void SetToFullScreen()
         {
             bool crashing = true;
-            while (crashing || this.MediaPlayer.fullScreen == false)
+            while (crashing)
             {
                 try
                 {
+                    // if user pressed stop while we're trying to play then we need to stop
+                    if (UserPressedStop)
+                    {
+                        return;
+                    }
                     this.MediaPlayer.fullScreen = true; //TODO
                     crashing = false;
                 }
@@ -369,13 +381,14 @@ namespace TheBox.Movies.Models
             // stop
             if (e.Key == Key.MediaStop || e.Key == Key.V)
             {
-                //UserPressedStop = true;
+                UserPressedStop = true;
                 _playOptions = PlayOptions.Play;
                 //IsFullScreen = false;
                 //IsPlaying = false;
                 MediaPlayer.Ctlcontrols.stop();
                 MediaPlayer.fullScreen = false;
                 Application.Current.MainWindow.Focus();
+                PreviewMedia(false);
             }
 
             // Skip forwards

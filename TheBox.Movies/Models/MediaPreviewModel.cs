@@ -123,6 +123,7 @@ namespace TheBox.Movies.Models
                                 if (length > 0)
                                 {
                                     _mediaPlayer.Ctlcontrols.currentPosition = length / 4;
+                                    _mediaPlayer.fullScreen = false;
                                 }
                             }
                             catch { }
