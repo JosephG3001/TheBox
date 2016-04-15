@@ -48,6 +48,12 @@ namespace TheBox.Movies.Models
         /// </remarks>
         public void PreviewMedia(bool stopPreview)
         {
+            // if we are in play all mode then we shouldn't ever be previewing
+            if (!MediaPlayerModel.GetInstance.UserPressedStop)
+            {
+                return;
+            }
+
             lock (_previewlock)
             {
                 CancellationTokenSource ts = new CancellationTokenSource();
@@ -123,7 +129,7 @@ namespace TheBox.Movies.Models
                                 if (length > 0)
                                 {
                                     _mediaPlayer.Ctlcontrols.currentPosition = length / 4;
-                                    _mediaPlayer.fullScreen = false;
+                                    //_mediaPlayer.fullScreen = false;
                                 }
                             }
                             catch { }

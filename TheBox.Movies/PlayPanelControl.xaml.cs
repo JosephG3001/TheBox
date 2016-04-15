@@ -41,7 +41,8 @@ namespace TheBox.Movies
         public void HandleKeyDown(object sender, KeyEventArgs e)
         {
             // send keystrokes to the MediaPlayerModel? (controls the actual video)
-            if (MediaPlayerModel.GetInstance.MediaPlayer.fullScreen)
+            if (MediaPlayerModel.GetInstance.MediaPlayer.fullScreen ||
+                !MediaPlayerModel.GetInstance.UserPressedStop)
             {
                 MediaPlayerModel.GetInstance.HandleKeyDown(sender, e);
                 return;

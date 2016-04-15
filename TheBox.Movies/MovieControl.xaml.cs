@@ -286,14 +286,18 @@ namespace TheBox.Movies
                 return;
             }
 
+
             // we like the ability to skip through preview 
-            if (e.Key == Key.Left ||
-                e.Key == Key.Right ||
-                e.Key == Key.MediaNextTrack ||
-                e.Key == Key.N ||
-                e.Key == Key.P || e.Key == (Key)177)
+            if (MediaPlayerModel.GetInstance.IsPlayingMediaPlayer())
             {
-                MediaPlayerModel.GetInstance.HandleKeyDown(this, e);
+                if (e.Key == Key.Left ||
+                    e.Key == Key.Right ||
+                    e.Key == Key.MediaNextTrack ||
+                    e.Key == Key.N ||
+                    e.Key == Key.P || e.Key == (Key)177)
+                {
+                    MediaPlayerModel.GetInstance.HandleKeyDown(this, e);
+                }
             }
 
             // backspace

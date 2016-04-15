@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Windows;
 using TheBox.Common;
 using System.Windows.Input;
+using WMPLib;
 
 namespace TheBox.Movies.Models
 {
@@ -64,7 +65,7 @@ namespace TheBox.Movies.Models
         /// <summary>
         /// Gets a value indicating whether [user pressed stop].
         /// </summary>
-        public bool UserPressedStop { get; private set; }
+        public bool UserPressedStop { get; set; }
 
         /// <summary>
         /// The current play option selected - will be set back to play when a user presses stop to prevent
@@ -82,6 +83,7 @@ namespace TheBox.Movies.Models
         /// <param name="mediaPlayer">The media player.</param>
         public MediaPlayerModel(AxWMPLib.AxWindowsMediaPlayer mediaPlayer)
         {
+            UserPressedStop = true;
             _instance = this;
             this._mediaPlayer = mediaPlayer;
             this._mediaPlayer.PlayStateChange += _mediaPlayer_PlayStateChange;
@@ -102,7 +104,7 @@ namespace TheBox.Movies.Models
         {
             try
             {
-                //if (isPlayingMediaPlayer())
+                if (IsPlayingMediaPlayer())
                 {
                     MediaPlayer.Ctlcontrols.pause();
                     MediaPlayer.Ctlcontrols.currentPosition -= amount;
@@ -126,7 +128,7 @@ namespace TheBox.Movies.Models
         {
             try
             {
-               // if (isPlayingMediaPlayer())
+                if (IsPlayingMediaPlayer())
                 {
                     // Get duration.
                     double duration = MediaPlayer.currentMedia.duration;
@@ -224,6 +226,16 @@ namespace TheBox.Movies.Models
             bool crashing = true;
             while (crashing)
             {
+                while (!IsPlayingMediaPlayer())
+                {
+                    // if user pressed stop while we're trying to play then we need to stop
+                    if (UserPressedStop)
+                    {
+                        return;
+                    }
+                    Thread.Sleep(20);
+                }
+
                 try
                 {
                     // if user pressed stop while we're trying to play then we need to stop
@@ -236,7 +248,7 @@ namespace TheBox.Movies.Models
                 }
                 catch
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(20);
                 }
             }
         }
@@ -329,6 +341,15 @@ namespace TheBox.Movies.Models
         #endregion Auto Play Methods
 
         /// <summary>
+        /// Is media playing? This is not our plag but the media player.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsPlayingMediaPlayer()
+        {
+            return _mediaPlayer.playState == WMPPlayState.wmppsReady || _mediaPlayer.playState == WMPPlayState.wmppsPlaying;
+        }
+
+        /// <summary>
         /// _medias the player_ play state change.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -340,10 +361,10 @@ namespace TheBox.Movies.Models
                 case 0: break;   // Undefined
                 case 1:    // Stopped
                     Task.Run(() => 
-                    {
-                        Thread.Sleep(1000);
+                    {            
                         if (_playOptions == PlayOptions.PlayAll || _playOptions == PlayOptions.Shuffle)
                         {
+                            Thread.Sleep(1000);
                             Application.Current.Dispatcher.Invoke(RunAutoPlaySequence);
                         }
                     });
