@@ -37,8 +37,8 @@
                     <Image x:Name="ImageGrid" Source="{Binding CurrentEmulatorImage}" Stretch="Uniform" />
                 </Grid>
 
-                <Grid Grid.Row="1" Margin="0,5,0,0">
-   
+                <Grid Grid.Row="1" Background="Transparent" Margin="0,5,0,0">
+                    <Image x:Name="GameImageGrid" Margin="20" Source="{Binding CurrentGameImage}" Stretch="Uniform" />
                 </Grid>
             </Grid>
 

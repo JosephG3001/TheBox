@@ -66,6 +66,7 @@ namespace TheBox.Movies.Models
         /// Gets a value indicating whether [user pressed stop].
         /// </summary>
         public bool UserPressedStop { get; set; }
+        public bool LoadingNextFile { get; private set; }
 
         /// <summary>
         /// The current play option selected - will be set back to play when a user presses stop to prevent
@@ -211,11 +212,34 @@ namespace TheBox.Movies.Models
                 Application.Current.Dispatcher.Invoke(() => {
                     Application.Current.MainWindow.Focus();
                 });
+
+                LoadingNextFile = false;
+
+                Task.Run(() => { KeepFullScreen(); });
             }));
 
             playthread.Name = "playThread";
             playthread.IsBackground = true;
             playthread.Start();
+        }
+
+        private void KeepFullScreen()
+        {
+            while (!UserPressedStop)
+            {
+                try
+                {
+                    if (!LoadingNextFile && !_mediaPlayer.fullScreen)
+                    {
+                        _mediaPlayer.fullScreen = true;
+                    }
+                    Thread.Sleep(10000);
+                }
+                catch { }
+            }
+
+
+            int breakpoint = 0;
         }
 
         /// <summary>
@@ -361,9 +385,15 @@ namespace TheBox.Movies.Models
                 case 0: break;   // Undefined
                 case 1:    // Stopped
                     Task.Run(() => 
-                    {            
+                    {       
+                        if (_playOptions == PlayOptions.Play)
+                        {
+                            UserPressedStop = true;
+                            return;
+                        }
                         if (_playOptions == PlayOptions.PlayAll || _playOptions == PlayOptions.Shuffle)
                         {
+                            LoadingNextFile = true;
                             Thread.Sleep(1000);
                             Application.Current.Dispatcher.Invoke(RunAutoPlaySequence);
                         }

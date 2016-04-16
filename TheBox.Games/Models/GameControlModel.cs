@@ -83,5 +83,16 @@ namespace TheBox.Games.Models
                 OnPropertyChanged();
             }
         }
+
+        private string _currentGameImage;
+        public string CurrentGameImage
+        {
+            get { return _currentGameImage; }
+            set
+            {
+                _currentGameImage = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

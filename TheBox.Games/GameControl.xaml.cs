@@ -20,6 +20,8 @@ using TheBox.Games.Settings;
 using TheBox.Games.Modals;
 using System.IO;
 using System.Diagnostics;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace TheBox.Games
 {
@@ -67,6 +69,7 @@ namespace TheBox.Games
 
             // set this gameControl's datacontext to the singleton PageModel
             this.ImageGrid.DataContext = GameControlModel.GetInstance;
+            this.GameImageGrid.DataContext = GameControlModel.GetInstance;
         }
 
         #endregion Constructors
@@ -210,6 +213,7 @@ namespace TheBox.Games
             if (e.Key == Key.Back)
             {
                 PageModel.GetInstance.NavigateBackwards();
+                GameControlModel.GetInstance.CurrentGameImage = null;
             }
 
             // up
@@ -253,6 +257,9 @@ namespace TheBox.Games
                 if (selectedItemModel.FilePath == null)
                 {
                     selectedItemModel.RelayCommand.action();
+
+                    // diving into rom list to show the first game cover
+                    ShowGameImage();
                 }
                 else
                 {
@@ -267,11 +274,56 @@ namespace TheBox.Games
         #endregion IBoxKeyboardControl implementation
 
         /// <summary>
-        /// Shows the game image.
+        /// Shows the game image by searching Google.
         /// </summary>
         private void ShowGameImage()
         {
-            // TODO: grab first game image from google or something
+            Task.Run(() => 
+            {
+                // create the request url
+                string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText;
+                string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText;
+                string url = string.Format("https://www.bing.com/images/search?q={0}&go=Submit+Query&qs=bs&form=QBIR", string.Join(" ", consoleName, RemoveBadWordsFromGameName(gameName)/*, "-cd -disc -cart -cartridge"*/));
+
+                // get the response
+                string data = "";
+                WebRequest request = HttpWebRequest.Create(url);
+                WebResponse response = request.GetResponse();
+                using (Stream stream = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        data = reader.ReadToEnd();
+                    }
+                }
+
+                // get the image
+                MatchCollection matches = Regex.Matches(data, "<img.*?src=\"http(.*?)/>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                List<string> imageUrls = new List<string>();
+                foreach (Match match in matches)
+                {
+                    string rurl = Regex.Match(match.Value, "http(.*?)\"").Value;
+                    imageUrls.Add(rurl.Replace("\"", ""));
+                }
+
+                Application.Current.Dispatcher.Invoke(() => 
+                {
+                    GameControlModel.GetInstance.CurrentGameImage = imageUrls.FirstOrDefault();
+                });
+            });
+        }
+
+        private string RemoveBadWordsFromGameName(string gameName)
+        {
+            gameName = gameName.Replace("CD1", "");
+            gameName = gameName.Replace("CD2", "");
+            gameName = gameName.Replace("CD3", "");
+            gameName = gameName.Replace("CD4", "");
+            gameName = gameName.Replace("Disc 1", "");
+            gameName = gameName.Replace("Disc 2", "");
+            gameName = gameName.Replace("Disc 3", "");
+            gameName = gameName.Replace("Disc 4", "");
+            return gameName;
         }
 
         /// <summary>

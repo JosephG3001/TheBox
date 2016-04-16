@@ -77,6 +77,14 @@ namespace TheBox.Common.Models
         #region Public Properties
 
         /// <summary>
+        /// Gets the menu entity models.
+        /// </summary>
+        public List<MenuEntity> MenuEntityModels
+        {
+            get { return _previousMenuEntityModels; }
+        }
+
+        /// <summary>
         /// Gets or sets the bread cumbs.
         /// </summary>
         public string BreadCumbs
