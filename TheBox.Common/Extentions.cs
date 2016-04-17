@@ -33,5 +33,19 @@ namespace System
             Regex rgx = new Regex("[^a-zA-Z0-9 -]");
             return rgx.Replace(input, " ");
         }
+
+        /// <summary>
+        /// Removes the commas.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        public static string RemoveCommas(this string input)
+        {
+            if (input == null)
+            {
+                return input;
+            }
+            return input.Replace(",", "");
+        }
     }
 }

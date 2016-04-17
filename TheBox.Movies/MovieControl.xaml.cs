@@ -294,7 +294,7 @@ namespace TheBox.Movies
                     e.Key == Key.Right ||
                     e.Key == Key.MediaNextTrack ||
                     e.Key == Key.N ||
-                    e.Key == Key.P || e.Key == (Key)177)
+                    e.Key == Key.P || e.Key == (Key)177 || e.Key == Key.MediaPreviousTrack)
                 {
                     MediaPlayerModel.GetInstance.HandleKeyDown(this, e);
                 }

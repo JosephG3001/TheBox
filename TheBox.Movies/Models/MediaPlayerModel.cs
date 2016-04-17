@@ -449,7 +449,7 @@ namespace TheBox.Movies.Models
             }
 
             // skip backwards
-            if (e.Key == Key.P || e.Key == (Key)177)
+            if (e.Key == Key.P || e.Key == (Key)177 || e.Key == Key.MediaPreviousTrack)
             {
                 SkipBackwards(40);
             }

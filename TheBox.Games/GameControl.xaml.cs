@@ -60,8 +60,6 @@ namespace TheBox.Games
             // set this instance as the singleton
             _instance = this;
 
-
-
             // initialise the GameControlModel singleton.
             new GameControlModel(this.Dispatcher, this.ComponentName);
 
@@ -246,6 +244,54 @@ namespace TheBox.Games
                 }
                 else
                 {
+                    GameImageModel.GetInstance.ShowGameImage();
+                }
+            }
+
+            // left
+            if (e.Key == Key.Left)
+            {
+                MenuItemModel selectedItemModel = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
+                if (selectedItemModel.FilePath != null)
+                {
+                    // select the previuos image from bing
+                    string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
+                    string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
+
+                    if (!GameImageModel.GetInstance.ImageOffsets.ContainsKey(consoleName + "_" + gameName))
+                    {
+                        // no need to do anything
+                        return;                    
+                    }
+
+                    if (GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName] > 0)
+                    {
+                        GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName]--;
+                        GameImageModel.GetInstance.SaveImageOffsets();
+                        GameImageModel.GetInstance.ShowGameImage();
+                    }
+                }
+            }
+
+            // right
+            if (e.Key == Key.Right)
+            {
+                MenuItemModel selectedItemModel = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
+                if (selectedItemModel.FilePath != null)
+                {
+                    // select the next image from bing
+                    string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
+                    string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
+
+                    if (!GameImageModel.GetInstance.ImageOffsets.ContainsKey(consoleName + "_" + gameName))
+                    {
+                        GameImageModel.GetInstance.ImageOffsets.Add(consoleName + "_" + gameName, 1);
+                    }
+                    else
+                    {
+                        GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName]++;
+                    }
+                    GameImageModel.GetInstance.SaveImageOffsets();
                     GameImageModel.GetInstance.ShowGameImage();
                 }
             }

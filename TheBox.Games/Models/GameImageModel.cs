@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using TheBox.Common.Models;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace TheBox.Games.Models
 {
@@ -48,9 +48,34 @@ namespace TheBox.Games.Models
         private GameImageModel()
         {
             _instance = this;
+
+            LoadImageOffsets();
         }
 
+        /// <summary>
+        /// The image offsets
+        /// </summary>
+        public Dictionary<string, int> ImageOffsets = new Dictionary<string, int>();
+
+        /// <summary>
+        /// Gets the _game offsets path.
+        /// </summary>
+        private string _gameOffsetsPath
+        {
+            get
+            {
+                return Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath) + "\\game_image_offsets.ini";
+            }
+        }
+
+        /// <summary>
+        /// The _tokens
+        /// </summary>
         private List<CancellationTokenSource> _tokens = new List<CancellationTokenSource>();
+
+        /// <summary>
+        /// The _image lock
+        /// </summary>
         private object _imageLock = new object();
 
         /// <summary>
@@ -73,8 +98,8 @@ namespace TheBox.Games.Models
                 Task.Run(() =>
                 {
                     // create the request url
-                    string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText;
-                    string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText;
+                    string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
+                    string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
                     string url = string.Format("https://www.bing.com/images/search?q={0}&go=Submit+Query&qs=bs&form=QBIR", string.Join(" ", consoleName, RemoveBadWordsFromGameName(gameName)/*, "-cd -disc -cart -cartridge"*/));
 
                     // cancel?
@@ -117,10 +142,16 @@ namespace TheBox.Games.Models
                     }
 
                     // show image on screen
+                    int offSet = 0;
+                    if (ImageOffsets.ContainsKey(consoleName + "_" + gameName))
+                    {
+                        offSet = ImageOffsets[consoleName + "_" + gameName];
+                    }
+
                     AutoResetEvent e = new AutoResetEvent(false);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        GameControlModel.GetInstance.CurrentGameImage = imageUrls.FirstOrDefault();
+                        GameControlModel.GetInstance.CurrentGameImage = imageUrls[offSet];
                         e.Set();
                     });
                     e.WaitOne();
@@ -143,7 +174,48 @@ namespace TheBox.Games.Models
             gameName = gameName.Replace("Disc 2", "");
             gameName = gameName.Replace("Disc 3", "");
             gameName = gameName.Replace("Disc 4", "");
+            gameName = gameName.Replace(".img", "");
             return gameName;
+        }
+
+        /// <summary>
+        /// Loads the image offsets.
+        /// </summary>
+        private void LoadImageOffsets()
+        {
+            // load image offsets
+            if (File.Exists(_gameOffsetsPath))
+            {
+                using (StreamReader reader = new StreamReader(_gameOffsetsPath))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        try
+                        {
+                            string[] game = reader.ReadLine().Split(',').ToArray();
+                            ImageOffsets.Add(game[0], Convert.ToInt32(game[1]));
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Saves the image offsets.
+        /// </summary>
+        public void SaveImageOffsets()
+        {
+            using (StreamWriter writer = new StreamWriter(_gameOffsetsPath))
+            {
+                foreach (var offset in this.ImageOffsets)
+                {
+                    writer.WriteLine(offset.Key + "," + offset.Value);
+                }
+            }
         }
     }
 }
