@@ -56,6 +56,7 @@
       <DependentUpon>NoEmulatorsConfiguredModal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\GameControlModel.cs" />
+    <Compile Include="Models\GameImageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\EmulatorSetting.cs" />
     <Compile Include="Settings\EmulatorSettings.cs" />
