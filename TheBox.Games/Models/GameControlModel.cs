@@ -94,5 +94,16 @@ namespace TheBox.Games.Models
                 OnPropertyChanged();
             }
         }
+
+        private bool _usingLocalImage;
+        public bool UsingLocalImage
+        {
+            get { return _usingLocalImage; }
+            set
+            {
+                _usingLocalImage = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

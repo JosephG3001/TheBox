@@ -6,9 +6,17 @@
              xmlns:local="clr-namespace:TheBox.Games"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000"
-             xmlns:CommonControls="clr-namespace:TheBox.Common.Controls;assembly=TheBox.Common">
-    
-    
+             xmlns:CommonControls="clr-namespace:TheBox.Common.Controls;assembly=TheBox.Common"
+             xmlns:Converters="clr-namespace:TheBox.Common.Converters;assembly=TheBox.Common">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Converters:BoolToCollapseConverter x:Key="BoolToCollapseConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TheBox.Common;component/Styles/Generics.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -29,7 +37,8 @@
 
             <Grid Grid.Column="1" Margin="15, 0" >
                 <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="15*"></RowDefinition>
+                    <RowDefinition Height="15*"></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
@@ -39,6 +48,9 @@
 
                 <Grid Grid.Row="1" Background="Transparent" Margin="0,5,0,0">
                     <Image x:Name="GameImageGrid" Margin="20" Source="{Binding CurrentGameImage}" Stretch="Uniform" />
+                </Grid>
+                <Grid Grid.Row="2" x:Name="EllipseGrid" Visibility="{Binding UsingLocalImage, Converter={StaticResource BoolToCollapseConverter}}">
+                    <Ellipse Fill="Silver" Width="7" Height="7"></Ellipse>
                 </Grid>
             </Grid>
 

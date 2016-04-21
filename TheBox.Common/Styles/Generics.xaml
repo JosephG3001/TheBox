@@ -3,7 +3,7 @@
                     xmlns:Local="clr-namepsace:TheBox.Common"
                     xmlns:UI="clr-namespace:TheBox.Common.UI">
 
-
+    
 
     <SolidColorBrush x:Key="DefaultBackground" Color="#FF000415" />
     <SolidColorBrush x:Key="DefaultBlue" Color="#FF081749" />
@@ -190,7 +190,9 @@
 
 
 
- 
+    <Style TargetType="{x:Type GridViewColumnHeader}">
+        <Setter Property="Visibility" Value="Collapsed" />
+    </Style>
     
 
 </ResourceDictionary>

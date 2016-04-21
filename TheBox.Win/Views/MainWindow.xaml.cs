@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using TheBox.Win.Models;
 using TheBox.Common;
 using TheBox.Common.Models;
+using System.IO;
+using System.Reflection;
 
 namespace TheBox.Win
 {
@@ -28,6 +30,14 @@ namespace TheBox.Win
         /// </summary>
         public MainWindow()
         {
+            // delete TheBox.Common file from the plugin folder as it crashes the TV schedule scanner
+            string pluginDir = System.IO.Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath) + "\\Plugin";
+            string fileNameAndPath = System.IO.Path.Combine(pluginDir, "TheBox.Common.dll");
+            if (File.Exists(fileNameAndPath))
+            {
+                File.Delete(fileNameAndPath);
+            }
+
             InitializeComponent();
 
             // set the windows's data context to it's MainWindowModel

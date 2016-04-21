@@ -42,13 +42,29 @@ namespace TheBox.Games.Models
 
         #endregion Singleton
 
+
+        /// <summary>
+        /// Gets the image folder path.  It is created if it doesn't exist
+        /// </summary>
+        public string ImageFolderPath
+        {
+            get
+            {
+                string path = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath) + "\\GameImages";
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                return path;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GameImageModel"/> class.
         /// </summary>
         private GameImageModel()
         {
             _instance = this;
-
             LoadImageOffsets();
         }
 
@@ -81,8 +97,11 @@ namespace TheBox.Games.Models
         /// <summary>
         /// Shows the game image by searching Bing.
         /// </summary>
-        public void ShowGameImage()
+        public void ShowGameImage(bool useSaved)
         {
+            string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
+            string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
+
             lock (_imageLock)
             {
                 if (_tokens.Count > 0)
@@ -97,9 +116,23 @@ namespace TheBox.Games.Models
 
                 Task.Run(() =>
                 {
+                    // do we have a saved image we can use?
+                    string imageFilePath = Path.Combine(ImageFolderPath, string.Join("_", consoleName, gameName)) + ".png";
+                    if (useSaved && File.Exists(imageFilePath))
+                    {
+                        GameControlModel.GetInstance.CurrentGameImage = imageFilePath;
+                        GameControlModel.GetInstance.UsingLocalImage = true;
+
+                        lock (_imageLock)
+                        {
+                            _tokens.Remove(ts);
+                        }
+                        return;
+                    }
+
+                    GameControlModel.GetInstance.UsingLocalImage = false;
+
                     // create the request url
-                    string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
-                    string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
                     string url = string.Format("https://www.bing.com/images/search?q={0}&go=Submit+Query&qs=bs&form=QBIR", string.Join(" ", consoleName, RemoveBadWordsFromGameName(gameName)/*, "-cd -disc -cart -cartridge"*/));
 
                     // cancel?

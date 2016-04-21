@@ -11,6 +11,7 @@
         Background="{StaticResource DefaultBackground}"
         WindowStartupLocation="CenterScreen"
         KeyDown="Window_KeyDown"
+        xmlns:CommonControls="clr-namespace:TheBox.Common.Controls;assembly=TheBox.Common"
         xmlns:Views="clr-namespace:TheBox.Win.Views"
         WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize" Cursor="{Binding MouseCursor}">
 
@@ -106,7 +107,7 @@
         </Grid>
 
         <Grid Grid.ColumnSpan="5" Grid.RowSpan="5">
-            <Views:ModalControl></Views:ModalControl>
+            <CommonControls:ModalControl></CommonControls:ModalControl>
         </Grid>
 
     </Grid>

@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TheBox.Common.Models;
 
-namespace TheBox.Win.Views
+namespace TheBox.Common.Controls
 {
     /// <summary>
     /// Interaction logic for ModalControl.xaml

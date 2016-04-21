@@ -64,10 +64,14 @@
     <Compile Include="Controls\IBoxProgressBar.xaml.cs">
       <DependentUpon>IBoxProgressBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ModalControl.xaml.cs">
+      <DependentUpon>ModalControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PageControl.xaml.cs">
       <DependentUpon>PageControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToCollapseConverter.cs" />
+    <Compile Include="Converters\ReverseBoolConverter.cs" />
     <Compile Include="Extentions.cs" />
     <Compile Include="IBoxComponent.cs" />
     <Compile Include="IBoxKeyboardControl.cs" />
@@ -132,6 +136,10 @@
     <Page Include="Controls\IBoxProgressBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ModalControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\PageControl.xaml">
       <SubType>Designer</SubType>

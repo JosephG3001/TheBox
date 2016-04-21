@@ -22,6 +22,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace TheBox.Games
 {
@@ -68,6 +69,7 @@ namespace TheBox.Games
             // set this gameControl's datacontext to the singleton PageModel
             this.ImageGrid.DataContext = GameControlModel.GetInstance;
             this.GameImageGrid.DataContext = GameControlModel.GetInstance;
+            this.EllipseGrid.DataContext = GameControlModel.GetInstance;
         }
 
         #endregion Constructors
@@ -227,7 +229,7 @@ namespace TheBox.Games
                 }
                 else
                 {
-                    GameImageModel.GetInstance.ShowGameImage();
+                    GameImageModel.GetInstance.ShowGameImage(true);
                 }
             }
 
@@ -244,7 +246,7 @@ namespace TheBox.Games
                 }
                 else
                 {
-                    GameImageModel.GetInstance.ShowGameImage();
+                    GameImageModel.GetInstance.ShowGameImage(true);
                 }
             }
 
@@ -268,7 +270,7 @@ namespace TheBox.Games
                     {
                         GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName]--;
                         GameImageModel.GetInstance.SaveImageOffsets();
-                        GameImageModel.GetInstance.ShowGameImage();
+                        GameImageModel.GetInstance.ShowGameImage(false);
                     }
                 }
             }
@@ -292,7 +294,7 @@ namespace TheBox.Games
                         GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName]++;
                     }
                     GameImageModel.GetInstance.SaveImageOffsets();
-                    GameImageModel.GetInstance.ShowGameImage();
+                    GameImageModel.GetInstance.ShowGameImage(false);
                 }
             }
 
@@ -305,7 +307,7 @@ namespace TheBox.Games
                     selectedItemModel.RelayCommand.action();
 
                     // diving into rom list to show the first game cover
-                    GameImageModel.GetInstance.ShowGameImage();
+                    GameImageModel.GetInstance.ShowGameImage(true);
                 }
                 else
                 {
@@ -355,7 +357,11 @@ namespace TheBox.Games
                         FilePath = file,
                         RelayCommand = new RelayCommand(() =>
                         {
-                            RunEmulator(setting, file);
+                            string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
+                            string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
+
+                            // navigate to game options modal
+                            ModalModel.GetInstance.ModalUserControl = new GameOptionsModal(consoleName + "_" +  gameName, () => { RunEmulator(setting, file); } );
                         })
                     });
                 }
