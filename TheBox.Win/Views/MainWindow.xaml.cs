@@ -95,7 +95,11 @@ namespace TheBox.Win
             // send keystroke to the modal?
             if (ModalModel.GetInstance.ModalUserControl != null)
             {
-                ((IBoxKeyboardControl)ModalModel.GetInstance.ModalUserControl).HandleKeyDown(sender, e);
+                IBoxKeyboardControl modal = ModalModel.GetInstance.ModalUserControl as IBoxKeyboardControl;
+                if (modal != null)
+                {
+                    modal.HandleKeyDown(sender, e);
+                }
                 return;
             }
 

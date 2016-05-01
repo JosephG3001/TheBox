@@ -223,6 +223,9 @@ namespace TheBox.Movies.Models
             playthread.Start();
         }
 
+        /// <summary>
+        /// Keeps the full screen.
+        /// </summary>
         private void KeepFullScreen()
         {
             while (!UserPressedStop)
@@ -232,14 +235,17 @@ namespace TheBox.Movies.Models
                     if (!LoadingNextFile && !_mediaPlayer.fullScreen)
                     {
                         _mediaPlayer.fullScreen = true;
+
+                        // Playing full screen, give focus back to form1.
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            Application.Current.MainWindow.Focus();
+                        });
                     }
-                    Thread.Sleep(10000);
+                    Thread.Sleep(500);
                 }
                 catch { }
             }
-
-
-            int breakpoint = 0;
         }
 
         /// <summary>
