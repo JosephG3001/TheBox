@@ -168,6 +168,7 @@ namespace TheBox.Movies.Models
         public void PlayMediaFullScreen(PlayOptions playOption)
         {
             UserPressedStop = false;
+            LoadingNextFile = true;
 
             _mediaPreviewModel.CancelPreviews();
             _playOptions = playOption;
@@ -438,14 +439,17 @@ namespace TheBox.Movies.Models
             // stop
             if (e.Key == Key.MediaStop || e.Key == Key.V)
             {
-                UserPressedStop = true;
-                _playOptions = PlayOptions.Play;
-                //IsFullScreen = false;
-                //IsPlaying = false;
-                MediaPlayer.Ctlcontrols.stop();
-                MediaPlayer.fullScreen = false;
-                Application.Current.MainWindow.Focus();
-                PreviewMedia(false);
+                if (!LoadingNextFile)
+                {
+                    UserPressedStop = true;
+                    _playOptions = PlayOptions.Play;
+                    //IsFullScreen = false;
+                    //IsPlaying = false;
+                    MediaPlayer.Ctlcontrols.stop();
+                    MediaPlayer.fullScreen = false;
+                    Application.Current.MainWindow.Focus();
+                    PreviewMedia(false);
+                }
             }
 
             // Skip forwards
