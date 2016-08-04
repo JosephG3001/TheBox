@@ -130,12 +130,25 @@ namespace TheBox.Movies.TVSchedule
             List<MenuItemModel> menuItems = new List<MenuItemModel>();
 
             // Show the "Downloading TV Schedule" loading modal
-            ModalModel.GetInstance.ModalUserControl = new DownloadingTVScheduleModal();
+            DownloadingTVScheduleModal modal = new DownloadingTVScheduleModal();
+            ModalModel.GetInstance.ModalUserControl = modal;
 
             Task.Run(() =>
             {
-                // download schedule from TVSchedule plugin
-                this.Schedule = TVScheduleService.GetSchedule();
+                try
+                {
+                    // download schedule from TVSchedule plugin
+                    this.Schedule = TVScheduleService.GetSchedule();
+
+                }
+                catch (Exception ex)
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        modal.SetFail(ex.Message);
+                    });
+                    return;
+                }
 
                 this.Dispatcher.Invoke(() =>
                 {

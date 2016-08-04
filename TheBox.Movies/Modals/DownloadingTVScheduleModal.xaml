@@ -20,8 +20,10 @@
         <Viewbox >
             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <TextBlock HorizontalAlignment="Center" FontSize="20" Margin="20" Foreground="White" Text="Downloading TV Schedules"></TextBlock>
-                <mah:ProgressRing Foreground="{StaticResource SpinnerColour}" ></mah:ProgressRing>
-                <TextBlock HorizontalAlignment="Center" Margin="20" Foreground="White" Text="Please wait..."></TextBlock>
+                <Grid Height="70" x:Name="progressRing1">
+                    <mah:ProgressRing Foreground="{StaticResource SpinnerColour}" ></mah:ProgressRing>
+                </Grid>
+                <TextBlock HorizontalAlignment="Center" x:Name="tbkPleaseWait" Margin="20" Foreground="White" Text="Please wait..."></TextBlock>
             </StackPanel>
         </Viewbox>
     </Grid>
