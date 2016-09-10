@@ -377,8 +377,23 @@ namespace TheBox.Movies.Models
         /// <returns></returns>
         public bool IsPlayingMediaPlayer()
         {
-            return _mediaPlayer.playState == WMPPlayState.wmppsReady || _mediaPlayer.playState == WMPPlayState.wmppsPlaying;
+            int retries = 500;
+            while (retries > 0)
+            {
+                try
+                {
+                    retries--;
+                    return _mediaPlayer.playState == WMPPlayState.wmppsReady || _mediaPlayer.playState == WMPPlayState.wmppsPlaying;
+                }
+                catch (Exception)
+                {
+                    // try again
+                    Thread.Sleep(10);
+                }
+            }
+            throw new Exception(string.Format("Error occured in method: {0}. Failed to get the playState", System.Reflection.MethodInfo.GetCurrentMethod().Name));
         }
+        
 
         /// <summary>
         /// _medias the player_ play state change.
