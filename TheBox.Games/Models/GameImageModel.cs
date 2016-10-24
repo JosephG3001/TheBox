@@ -203,11 +203,17 @@ namespace TheBox.Games.Models
             gameName = gameName.Replace("CD2", "");
             gameName = gameName.Replace("CD3", "");
             gameName = gameName.Replace("CD4", "");
+            gameName = gameName.Replace("cd1", "");
+            gameName = gameName.Replace("cd2", "");
+            gameName = gameName.Replace("cd3", "");
+            gameName = gameName.Replace("cd4", "");
             gameName = gameName.Replace("Disc 1", "");
             gameName = gameName.Replace("Disc 2", "");
             gameName = gameName.Replace("Disc 3", "");
             gameName = gameName.Replace("Disc 4", "");
             gameName = gameName.Replace(".img", "");
+            gameName = gameName.Replace("(USA)", "");
+            gameName = gameName.Replace("(usa)", "");
             return gameName;
         }
 
