@@ -183,6 +183,16 @@ namespace TheBox.Movies.Models
                 IsVisible = true,
                 RelayCommand = new RelayCommand(() => { MediaPlayerModel.GetInstance.PlayMediaFullScreen(PlayOptions.Shuffle); })
             });
+
+            // Repeat Button
+            PlayOptionsMenu.AddMenuItemModel(new MenuItemModel()
+            {
+                DisplayText = "Repeat",
+                IsSelected = false,
+                ParentSelected = true,
+                IsVisible = true,
+                RelayCommand = new RelayCommand(() => { MediaPlayerModel.GetInstance.PlayMediaFullScreen(PlayOptions.Repeat); })
+            });
         }
     }
 }

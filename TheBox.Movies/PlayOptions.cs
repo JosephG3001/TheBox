@@ -14,6 +14,7 @@ namespace TheBox.Movies
         None = 0,
         Play = 1,
         PlayAll = 2,
-        Shuffle = 3
+        Shuffle = 3,
+        Repeat = 4,
     }
 }

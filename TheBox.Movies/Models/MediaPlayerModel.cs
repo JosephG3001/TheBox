@@ -311,6 +311,9 @@ namespace TheBox.Movies.Models
                 case PlayOptions.Shuffle:
                     MoveToNextRandomFile();
                     break;
+                case PlayOptions.Repeat:
+                    PlayMediaFullScreen(_playOptions);
+                    break;
                 default:
                     return;
             }
@@ -413,7 +416,7 @@ namespace TheBox.Movies.Models
                             UserPressedStop = true;
                             return;
                         }
-                        if (_playOptions == PlayOptions.PlayAll || _playOptions == PlayOptions.Shuffle)
+                        if (_playOptions == PlayOptions.PlayAll || _playOptions == PlayOptions.Shuffle || _playOptions == PlayOptions.Repeat)
                         {
                             LoadingNextFile = true;
                             Thread.Sleep(1000);
