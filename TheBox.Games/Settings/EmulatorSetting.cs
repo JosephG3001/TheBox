@@ -30,5 +30,8 @@ namespace TheBox.Games.Settings
 
         [XmlElement("EmulatorPath")]
         public string EmulatorPath;
+
+        [XmlElement("WinKawaks")]
+        public bool WinKawaks;
     }
 }

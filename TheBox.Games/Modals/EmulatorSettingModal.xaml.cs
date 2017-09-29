@@ -39,12 +39,20 @@ namespace TheBox.Games
 
                 if (setting != null)
                 {
-                    txtImagePath.Text = setting.ConsoleImagePath;
-                    txtRomPath.Text = setting.RomPath;
-                    txtRunCommand.Text = setting.BootCommand;
-                    txtSystemName.Text = setting.EmulatatedSystemName;
-                    txtFileExt.Text = setting.FileExt;
-                    txtEmulatorPath.Text = setting.EmulatorPath;
+                    try
+                    {
+                        txtImagePath.Text = setting.ConsoleImagePath;
+                        txtRomPath.Text = setting.RomPath;
+                        txtRunCommand.Text = setting.BootCommand;
+                        txtSystemName.Text = setting.EmulatatedSystemName;
+                        txtFileExt.Text = setting.FileExt;
+                        txtEmulatorPath.Text = setting.EmulatorPath;
+                        chkWinKawaks.IsChecked = setting.WinKawaks;
+                    }
+                    catch (Exception)
+                    {
+                        chkWinKawaks.IsChecked = false;
+                    }
                 }
             }
         }
@@ -101,6 +109,7 @@ namespace TheBox.Games
             setting.RomPath = txtRomPath.Text;
             setting.FileExt = txtFileExt.Text;
             setting.EmulatorPath = txtEmulatorPath.Text;
+            setting.WinKawaks = chkWinKawaks.IsChecked.Value;
 
             // convert the settings back to array sorted by system name
             GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList = settings.OrderBy(m => m.EmulatatedSystemName).ToArray();

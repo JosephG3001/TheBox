@@ -49,6 +49,11 @@
                     <TextBox Width="500" Height="31" FontSize="18" x:Name="txtRunCommand" VerticalAlignment="Center" ></TextBox>
                 </StackPanel>
 
+                <!-- Run Command -->
+                <CheckBox x:Name="chkWinKawaks" FontSize="18" Margin="0,15" VerticalAlignment="Center" Foreground="White">
+                    WinKawaks? Run commmand is "WinKawaks.exe" doubledr
+                </CheckBox>
+
                 <Grid></Grid>
                 
                 <!-- Buttons -->

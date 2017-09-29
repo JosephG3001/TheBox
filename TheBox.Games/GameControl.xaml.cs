@@ -397,7 +397,15 @@ namespace TheBox.Games
                 Process p = new Process();
                 p.StartInfo.FileName = setting.EmulatorPath;
                 p.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(setting.EmulatorPath);
-                p.StartInfo.Arguments = string.Format(setting.BootCommand, file);
+
+                if (setting.WinKawaks)
+                {
+                    p.StartInfo.Arguments = string.Format(System.IO.Path.GetFileNameWithoutExtension(file));
+                }
+                else
+                {
+                    p.StartInfo.Arguments = string.Format(setting.BootCommand, file);
+                }
                 p.StartInfo.UseShellExecute = true;
                 p.Start();
             }
