@@ -167,7 +167,7 @@ namespace TheBox.Movies.Models
         /// <returns></returns>
         private bool CheckPreviewCancel(CancellationToken ct)
         {
-            Thread.Sleep(100);
+            Thread.Sleep(400);
             if (ct.IsCancellationRequested)
             {
                 return true;
