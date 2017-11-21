@@ -28,7 +28,7 @@ namespace TheBox.Movies
     /// <summary>
     /// Interaction logic for MovieControl.xaml
     /// </summary>
-    public partial class MovieControl : UserControl, IBoxComponent, IBoxKeyboardControl
+    public partial class MovieControl : UserControl, IBoxComponent, IBoxKeyboardControl, IWindowsEvents
     {
         #region Constructors
 
@@ -347,5 +347,25 @@ namespace TheBox.Movies
         }
 
         #endregion IBoxKeyboardControl implementation
+
+        public void OnShuttingDown(object sender)
+        {
+            try
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    MediaPlayerModel.GetInstance.UserPressedStop = true;
+                    MediaPlayerModel.GetInstance.PlayOptions = PlayOptions.Play;
+                    MediaPlayerModel.GetInstance.MediaPlayer.fullScreen = false;
+                    MediaPlayerModel.GetInstance.MediaPlayer.Ctlcontrols.stop();
+                    Application.Current.MainWindow.Focus();
+
+                    Thread.Sleep(100);
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
     }
 }

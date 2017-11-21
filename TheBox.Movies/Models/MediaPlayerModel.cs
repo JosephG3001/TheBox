@@ -72,7 +72,7 @@ namespace TheBox.Movies.Models
         /// The current play option selected - will be set back to play when a user presses stop to prevent
         /// the auto play sequence from previewing another file
         /// </summary>
-        private PlayOptions _playOptions;
+        public PlayOptions PlayOptions { get; set; }
 
         #endregion Properties / Members
 
@@ -171,7 +171,7 @@ namespace TheBox.Movies.Models
             LoadingNextFile = true;
 
             _mediaPreviewModel.CancelPreviews();
-            _playOptions = playOption;
+            PlayOptions = playOption;
 
             Thread playthread = new Thread(new ThreadStart(delegate
             {
@@ -302,7 +302,7 @@ namespace TheBox.Movies.Models
         /// </summary>
         private void RunAutoPlaySequence()
         {
-            switch (_playOptions)
+            switch (PlayOptions)
             {
                 case PlayOptions.Play: return;
                 case PlayOptions.PlayAll:
@@ -312,14 +312,14 @@ namespace TheBox.Movies.Models
                     MoveToNextRandomFile();
                     break;
                 case PlayOptions.Repeat:
-                    PlayMediaFullScreen(_playOptions);
+                    PlayMediaFullScreen(PlayOptions);
                     break;
                 default:
                     return;
             }
 
             // Play the next item.
-            PlayMediaFullScreen(_playOptions);
+            PlayMediaFullScreen(PlayOptions);
         }
 
         /// <summary>
@@ -411,12 +411,12 @@ namespace TheBox.Movies.Models
                 case 1:    // Stopped
                     Task.Run(() => 
                     {       
-                        if (_playOptions == PlayOptions.Play)
+                        if (PlayOptions == PlayOptions.Play)
                         {
                             UserPressedStop = true;
                             return;
                         }
-                        if (_playOptions == PlayOptions.PlayAll || _playOptions == PlayOptions.Shuffle || _playOptions == PlayOptions.Repeat)
+                        if (PlayOptions == PlayOptions.PlayAll || PlayOptions == PlayOptions.Shuffle || PlayOptions == PlayOptions.Repeat)
                         {
                             LoadingNextFile = true;
                             Thread.Sleep(1000);
@@ -460,7 +460,7 @@ namespace TheBox.Movies.Models
                 if (!LoadingNextFile)
                 {
                     UserPressedStop = true;
-                    _playOptions = PlayOptions.Play;
+                    PlayOptions = PlayOptions.Play;
                     //IsFullScreen = false;
                     //IsPlaying = false;
                     MediaPlayer.Ctlcontrols.stop();

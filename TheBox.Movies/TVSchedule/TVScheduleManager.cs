@@ -152,41 +152,48 @@ namespace TheBox.Movies.TVSchedule
 
                 this.Dispatcher.Invoke(() =>
                 {
-                    if (this.Schedule.Providers.Count == 0)
+                    try
                     {
-                        // show "No Items to display"
-                        menuItems.Add(new MenuItemModel() { DisplayText = "No TV Providers Found..", IsSelected = true, ParentSelected = true });
-                    }
-                    else
-                    {
-                        foreach (var item in this.Schedule.Providers)
+                        if (this.Schedule.Providers.Count == 0)
                         {
-                            // create a new menu item for each of the TV providers found
-                            menuItems.Add(new MenuItemModel()
+                            // show "No Items to display"
+                            menuItems.Add(new MenuItemModel() { DisplayText = "No TV Providers Found..", IsSelected = true, ParentSelected = true });
+                        }
+                        else
+                        {
+                            foreach (var item in this.Schedule.Providers)
                             {
-                                DisplayText = item.ProviderName,
-                                IsSelected = false,
-                                ParentSelected = true,
-                                IsVisible = true,
-                                RelayCommand = new RelayCommand(() =>
+                                // create a new menu item for each of the TV providers found
+                                menuItems.Add(new MenuItemModel()
                                 {
-                                    NavigateToChannelListings(item);
-                                })
-                            });
+                                    DisplayText = item.ProviderName,
+                                    IsSelected = false,
+                                    ParentSelected = true,
+                                    IsVisible = true,
+                                    RelayCommand = new RelayCommand(() =>
+                                    {
+                                        NavigateToChannelListings(item);
+                                    })
+                                });
+                            }
+
+                            // Select the first menuItem on the list
+                            menuItems.First().IsSelected = true;
                         }
 
-                        // Select the first menuItem on the list
-                        menuItems.First().IsSelected = true;
+                        // navigate to the new menuEntity
+                        PageModel.GetInstance.NavigateForwards(menuItems);
+
+                        // remove the "Downloading TV Schedule" modal
+                        ModalModel.GetInstance.ModalUserControl = null;
+
+                        // update the bread crumbs label
+                        PageModel.GetInstance.DoBreadCrumbs(this._componentName);
                     }
-
-                    // navigate to the new menuEntity
-                    PageModel.GetInstance.NavigateForwards(menuItems);
-
-                    // remove the "Downloading TV Schedule" modal
-                    ModalModel.GetInstance.ModalUserControl = null;
-
-                    // update the bread crumbs label
-                    PageModel.GetInstance.DoBreadCrumbs(this._componentName);
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
                 });
             });
         }

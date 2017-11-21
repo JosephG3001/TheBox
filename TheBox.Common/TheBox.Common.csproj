@@ -76,6 +76,7 @@
     <Compile Include="IBoxComponent.cs" />
     <Compile Include="IBoxKeyboardControl.cs" />
     <Compile Include="ISettings.cs" />
+    <Compile Include="IWindowsEvents.cs" />
     <Compile Include="Menu\MenuEntity.cs" />
     <Compile Include="Menu\MenuItemModel.cs" />
     <Compile Include="Models\ModalModel.cs" />

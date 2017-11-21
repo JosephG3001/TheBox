@@ -17,6 +17,10 @@ using TheBox.Common;
 using TheBox.Common.Models;
 using System.IO;
 using System.Reflection;
+using Microsoft.Win32;
+using System.Threading;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace TheBox.Win
 {
@@ -25,6 +29,7 @@ namespace TheBox.Win
     /// </summary>
     public partial class MainWindow : Window
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -48,6 +53,44 @@ namespace TheBox.Win
 
             // bind property changed of the model
             MainWindowModel.GetInstance.PropertyChanged += GetInstance_PropertyChanged;
+
+            SystemEvents.SessionEnding += SystemEvents_SessionEnding;
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+
+            ForceBringToFront();
+        }
+
+        private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            // get the selected top menu item 
+            TopMenuItemModel selected = MainWindowModel.GetInstance.TopMenuItemModels.Where(m => m.IsSelected).First();
+
+            // get the underlying usercontrol
+            IWindowsEvents control = selected.Component.GetUserControl() as IWindowsEvents;
+            if (control != null)
+            {
+                if (e.Mode == PowerModes.Suspend)
+                {
+                    control.OnShuttingDown(this);
+                }
+                else
+                {
+                    ForceBringToFront();
+                }
+            }
+        }
+
+        private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
+        {
+            // get the selected top menu item 
+            TopMenuItemModel selected = MainWindowModel.GetInstance.TopMenuItemModels.Where(m => m.IsSelected).First();
+
+            // get the underlying usercontrol
+            IWindowsEvents control = selected.Component.GetUserControl() as IWindowsEvents;
+            if (control != null)
+            {
+                control.OnShuttingDown(this);
+            }
         }
 
         /// <summary>
@@ -192,6 +235,22 @@ namespace TheBox.Win
                 // No underlying userControl.. Just execute what ever RelayCommand action is present on the button
                 selected.RelayCommand.Execute(null);
                 return;
+            }
+        }
+
+        [DllImport("User32.dll")]
+        internal static extern IntPtr SetForegroundWindow(IntPtr hWnd);
+
+
+        private void ForceBringToFront()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Process currentProcess = Process.GetCurrentProcess();
+                IntPtr hWnd = currentProcess.MainWindowHandle;
+                SetForegroundWindow(hWnd);
+
+                Thread.Sleep(100);
             }
         }
     }
