@@ -54,7 +54,10 @@ namespace TheBox.Movies.Models
         /// </summary>
         public AxWMPLib.AxWindowsMediaPlayer MediaPlayer
         {
-            get { return _mediaPlayer; }
+            get
+            {
+                return _mediaPlayer;
+            }
         }
 
         /// <summary>
@@ -66,6 +69,7 @@ namespace TheBox.Movies.Models
         /// Gets a value indicating whether [user pressed stop].
         /// </summary>
         public bool UserPressedStop { get; set; }
+
         public bool LoadingNextFile { get; private set; }
 
         /// <summary>
@@ -173,7 +177,7 @@ namespace TheBox.Movies.Models
             _mediaPreviewModel.CancelPreviews();
             PlayOptions = playOption;
 
-            Thread playthread = new Thread(new ThreadStart(delegate
+            Task.Run(() =>
             {
                 bool crashing = true;
                 while (crashing)
@@ -216,13 +220,10 @@ namespace TheBox.Movies.Models
 
                 LoadingNextFile = false;
 
-                Task.Run(() => { KeepFullScreen(); });
-            }));
-
-            playthread.Name = "playThread";
-            playthread.IsBackground = true;
-            playthread.Start();
+                KeepFullScreen();
+            });
         }
+
 
         /// <summary>
         /// Keeps the full screen.
@@ -243,7 +244,7 @@ namespace TheBox.Movies.Models
                             Application.Current.MainWindow.Focus();
                         });
                     }
-                    Thread.Sleep(500);
+                    Thread.Sleep(1000);
                 }
                 catch { }
             }
@@ -264,7 +265,7 @@ namespace TheBox.Movies.Models
                     {
                         return;
                     }
-                    Thread.Sleep(20);
+                    Thread.Sleep(100);
                 }
 
                 try
@@ -279,7 +280,7 @@ namespace TheBox.Movies.Models
                 }
                 catch
                 {
-                    Thread.Sleep(20);
+                    Thread.Sleep(100);
                 }
             }
         }
@@ -391,7 +392,7 @@ namespace TheBox.Movies.Models
                 catch (Exception)
                 {
                     // try again
-                    Thread.Sleep(10);
+                    Thread.Sleep(50);
                 }
             }
             throw new Exception(string.Format("Error occured in method: {0}. Failed to get the playState", System.Reflection.MethodInfo.GetCurrentMethod().Name));
@@ -511,8 +512,3 @@ namespace TheBox.Movies.Models
         }
     }
 }
-
-
-
-
-

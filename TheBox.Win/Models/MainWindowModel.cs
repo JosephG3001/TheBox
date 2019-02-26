@@ -18,22 +18,9 @@ using System.Windows.Input;
 
 namespace TheBox.Win.Models
 {
-    /// <summary>
-    /// MainWindowModel
-    /// </summary>
-    /// <seealso cref="TheBox.Win.Models.ModelBase" />
     public class MainWindowModel : ModelBase
     {
-        #region Singleton
-
-        /// <summary>
-        /// The _instance
-        /// </summary>
         private static MainWindowModel _instance;
-
-        /// <summary>
-        /// Gets the get instance.
-        /// </summary>
         public static MainWindowModel GetInstance
         {
             get
@@ -46,33 +33,10 @@ namespace TheBox.Win.Models
             }
         }
 
-        #endregion Singleton
-
-        #region Private Members
-
-        /// <summary>
-        /// The _is full screen
-        /// </summary>
         private bool _isFullScreen;
-
-        /// <summary>
-        /// The _is selected
-        /// </summary>
         private bool _isTopMenuSelected;
-
-        /// <summary>
-        /// The _active user control
-        /// </summary>
         private UserControl _activeUserControl;
-
-        /// <summary>
-        /// The _mouse cursor
-        /// </summary>
         private Cursor _mouseCursor;
-
-        #endregion Private Members
-
-        #region Contructors
 
         /// <summary>
         /// Prevents a default instance of the <see cref="MainWindowModel"/> class from being created.
@@ -97,13 +61,6 @@ namespace TheBox.Win.Models
             MouseCursor = Cursors.None;
         }
 
-        #endregion Contructors
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is full screen.
-        /// </summary>
         public bool IsFullScreen
         {
             get { return _isFullScreen; }
@@ -114,9 +71,6 @@ namespace TheBox.Win.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is selected.
-        /// </summary>
         public bool IsTopMenuSelected
         {
             get { return _isTopMenuSelected; }
@@ -127,9 +81,6 @@ namespace TheBox.Win.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the active user control.
-        /// </summary>
         public UserControl ActiveUserControl
         {
             get { return _activeUserControl; }
@@ -140,9 +91,6 @@ namespace TheBox.Win.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the mouse cursor.
-        /// </summary>
         public Cursor MouseCursor
         {
             get { return _mouseCursor; }
@@ -153,17 +101,11 @@ namespace TheBox.Win.Models
             }
         }
 
-        /// <summary>
-        /// Gets the current time.
-        /// </summary>
         public string CurrentTime
         {
             get  {  return DateTime.Now.ToLongTimeString();  }
         }
 
-        /// <summary>
-        /// Gets the current date.
-        /// </summary>
         public string CurrentDate
         {
             get { return DateTime.Now.ToLongDateString(); }
@@ -177,7 +119,7 @@ namespace TheBox.Win.Models
             get; private set;
         }
 
-        #endregion Public Properties
+        public MainUIModel MainUIModel => MainUIModel.Instance;
 
         #region PageModel Bound Events
 

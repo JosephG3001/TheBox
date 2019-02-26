@@ -24,17 +24,28 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
-            <RowDefinition Height="15*"></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
+        <!--<CommonControls:BreadCrumbControl ></CommonControls:BreadCrumbControl>-->
 
-        <CommonControls:BreadCrumbControl ></CommonControls:BreadCrumbControl>
+        <Grid>
+            
+            
+            <Grid Grid.Row="0" 
+                      x:Name="mediaPlayerGrid" 
+                      Background="Black" 
+                      Visibility="Hidden"
+                      Margin="0,0,0,5">
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0,5,0,0">
+                <local:PlayPanelControl  x:Name="PlayPanel" ></local:PlayPanelControl>
+            </Grid>
+
+        </Grid>
+        
         
         <Grid Grid.Row="1" Margin="10,0,10,15">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
             <CommonControls:PageControl ></CommonControls:PageControl>
 
             <Grid Grid.Column="1" Margin="15, 0">
@@ -43,16 +54,7 @@
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" 
-                      x:Name="mediaPlayerGrid" 
-                      Background="Black" 
-                      Visibility="Hidden"
-                      Margin="0,0,0,5">
-                </Grid>
-
-                <Grid Grid.Row="1" Margin="0,5,0,0">
-                    <local:PlayPanelControl  x:Name="PlayPanel" ></local:PlayPanelControl>
-                </Grid>
+                
             </Grid>
         </Grid>
     </Grid>

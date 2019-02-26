@@ -16,7 +16,13 @@
                       BorderThickness="0">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <UI:IBoxMenuButton Content="{Binding DisplayText}" 
+                <UI:TileButton Content="{Binding DisplayText}" 
+                               IsSelected="{Binding IsSelected}" 
+                               ParentSelected="{Binding ParentSelected}" 
+                               Command="{Binding RelayCommand}" 
+                               TileImage="{Binding TileFileName}"
+                               Visibility="{Binding IsVisible, Converter={StaticResource BoolToCollapseConverter}}"></UI:TileButton>
+                <!--<UI:IBoxMenuButton Content="{Binding DisplayText}" 
                                            Odd="{Binding Odd}" 
                                            IsSelected="{Binding IsSelected}" 
                                            ParentSelected="{Binding ParentSelected}" 
@@ -24,12 +30,12 @@
                                            Visibility="{Binding IsVisible, Converter={StaticResource BoolToCollapseConverter}}"
                                            Margin="1"
                                            FontFamily="Consolas">
-                </UI:IBoxMenuButton>
+                </UI:IBoxMenuButton>-->
             </DataTemplate>
         </ListView.ItemTemplate>
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
-                <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Rows="12" Columns="1"
+                <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Rows="{Binding GridRows}" Columns="{Binding GridColumns}"
                                      Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}" />
             </ItemsPanelTemplate>
         </ListView.ItemsPanel>

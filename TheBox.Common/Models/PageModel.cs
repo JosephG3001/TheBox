@@ -9,22 +9,9 @@ using TheBox.Common.Menu;
 
 namespace TheBox.Common.Models
 {
-    /// <summary>
-    /// Page Model
-    /// </summary>
-    /// <seealso cref="TheBox.Common.ModelBase" />
     public class PageModel : ModelBase
     {
-        #region Singleton
-
-        /// <summary>
-        /// The _instance
-        /// </summary>
         private static PageModel _instance;
-
-        /// <summary>
-        /// Gets the get instance.
-        /// </summary>
         public static PageModel GetInstance
         {
             get
@@ -37,10 +24,6 @@ namespace TheBox.Common.Models
             }
         }
 
-        #endregion Singleton
-
-        #region Constructor
-
         /// <summary>
         /// Prevents a default instance of the <see cref="PageModel"/> class from being created.
         /// </summary>
@@ -48,8 +31,6 @@ namespace TheBox.Common.Models
         {
             this.VisibleMenuItemModels = new ObservableCollection<MenuItemModel>();
         }
-
-        #endregion Constructor
 
         // pagination variables
         private int _currentItem;
@@ -66,8 +47,20 @@ namespace TheBox.Common.Models
         public event EventHandler NoMoreMenuEntities;
         public event EventHandler NavigatedForwards;
         public event EventHandler NavigatedBackwards;
+        public event EventHandler Moved;
         public event EventHandler MovedUp;
         public event EventHandler MovedDown;
+        public event EventHandler MovedLeft;
+        public event EventHandler MovedRight;
+
+        /// <summary>
+        /// The maximum menu labels
+        /// </summary>
+        public int MaxMenuLabels => 15;
+
+        public int GridRows => 3;
+
+        public int GridColumns => 5;
 
         /// <summary>
         /// The _bread crumbs
@@ -79,10 +72,7 @@ namespace TheBox.Common.Models
         /// <summary>
         /// Gets the menu entity models.
         /// </summary>
-        public List<MenuEntity> MenuEntityModels
-        {
-            get { return _previousMenuEntityModels; }
-        }
+        public List<MenuEntity> MenuEntityModels => _previousMenuEntityModels;
 
         /// <summary>
         /// Gets or sets the bread cumbs.
@@ -170,7 +160,7 @@ namespace TheBox.Common.Models
             if (VisibleMenuItemModels.Count == 0)
             {
                 // create 12 menu items
-                for (int i = 0; i < MenuEntity.MaxMenuLabels; i++)
+                for (int i = 0; i < MaxMenuLabels; i++)
                 {
                     VisibleMenuItemModels.Add(new MenuItemModel() {
                         IsVisible = false,
@@ -180,7 +170,7 @@ namespace TheBox.Common.Models
             }
             else
             {
-                for (int i = 0; i < MenuEntity.MaxMenuLabels; i++)
+                for (int i = 0; i < MaxMenuLabels; i++)
                 {
                     // hide them all before we bind
                     VisibleMenuItemModels[i].IsVisible = false;
@@ -232,10 +222,9 @@ namespace TheBox.Common.Models
             // update view
             BindItems();
 
-            if (NavigatedForwards != null)
-            {
-                NavigatedForwards(this, EventArgs.Empty);
-            }
+            NavigatedForwards?.Invoke(this, EventArgs.Empty);
+            Moved?.Invoke(this, EventArgs.Empty);
+
             UpdatePaginationLabels();
         }
 
@@ -256,10 +245,9 @@ namespace TheBox.Common.Models
                 ClearPaginationLabels();
             }
 
-            if (NavigatedBackwards != null)
-            {
-                NavigatedBackwards(this, EventArgs.Empty);
-            }
+            NavigatedBackwards?.Invoke(this, EventArgs.Empty);
+            Moved?.Invoke(this, EventArgs.Empty);
+
             UpdatePaginationLabels();
         }
 
@@ -269,10 +257,8 @@ namespace TheBox.Common.Models
         public void MoveUp()
         {
             MenuEntityModel.MoveUp();
-            if (MovedUp != null)
-            {
-                MovedUp(this, EventArgs.Empty);
-            }
+            MovedUp?.Invoke(this, EventArgs.Empty);
+            Moved?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -281,10 +267,28 @@ namespace TheBox.Common.Models
         public void MoveDown()
         {
             MenuEntityModel.MoveDown();
-            if (MovedDown != null)
-            {
-                MovedDown(this, EventArgs.Empty);
-            }
+            MovedDown?.Invoke(this, EventArgs.Empty);
+            Moved?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Moves up within the current menu.
+        /// </summary>
+        public void MoveLeft()
+        {
+            MenuEntityModel.MoveLeft();
+            MovedLeft?.Invoke(this, EventArgs.Empty);
+            Moved?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Moves down within the current menu.
+        /// </summary>
+        public void MoveRight()
+        {
+            MenuEntityModel.MoveRight();
+            MovedRight?.Invoke(this, EventArgs.Empty);
+            Moved?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -348,7 +352,7 @@ namespace TheBox.Common.Models
             MenuEntity menu = PageModel.GetInstance.MenuEntityModel;
             if (menu != null)
             {
-                _currentItem = (menu.ButtonIndex + 1) + (menu.PageIndex * MenuEntity.MaxMenuLabels);
+                _currentItem = (menu.ButtonIndex + 1) + (menu.PageIndex * MaxMenuLabels);
                 _itemCount = menu.ItemCount;
                 _currentPage = (menu.PageIndex + 1);
                 _pageCount = menu.FullPageCount + (menu.ItemsRemaining > 0 ? 1 : 0);

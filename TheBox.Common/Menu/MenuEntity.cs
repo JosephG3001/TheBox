@@ -21,24 +21,15 @@ namespace TheBox.Common.Menu
             this.MenuItemModels = new ObservableCollection<MenuItemModel>();
         }
 
-        #region Private members
-
         /// <summary>
         /// The _button index (from 0 to 11)
         /// </summary>
         private int _buttonIndex = 0;
 
-        #endregion Private members
-
-        #region Public properties
-
         /// <summary>
         /// Gets or sets the menu item models.
         /// </summary>
-        public ObservableCollection<MenuItemModel> MenuItemModels
-        {
-            get; set;
-        }
+        public ObservableCollection<MenuItemModel> MenuItemModels { get; set; }
 
         /// <summary>
         /// Gets the selected menu item model.
@@ -52,7 +43,7 @@ namespace TheBox.Common.Menu
         }
 
         /// <summary>
-        /// Gets or sets the index of the button.
+        /// ButtonIndex will only ever be 0-MaxMenuLabels (12)
         /// </summary>
         public int ButtonIndex
         {
@@ -61,7 +52,7 @@ namespace TheBox.Common.Menu
             {
                 _buttonIndex = value;
                 UnselectButtons();
-                MenuItemModels[(value) + (PageIndex * MaxMenuLabels)].IsSelected = true;
+                MenuItemModels[(value) + (PageIndex * PageModel.GetInstance.MaxMenuLabels)].IsSelected = true;
             }
         }
 
@@ -69,76 +60,71 @@ namespace TheBox.Common.Menu
         /// <summary>
         /// Current page number within this menu
         /// </summary>
-        public int PageIndex
-        {
-            get; set;
-        }
+        public int PageIndex { get; set; }
 
         /// <summary>
         /// Remaining list items past max labels (could have 5 odd list items)
         /// </summary>
-        public int ItemsRemaining
-        {
-            get; set;
-        }
+        public int ItemsRemaining { get; set; }
 
         /// <summary>
         /// Amount of full pages (how many lots of 12)
         /// </summary>
-        public int FullPageCount
-        {
-            get; set;
-        }
+        public int FullPageCount { get; set; }
 
         /// <summary>
         /// Gets the item count.
         /// </summary>
-        public int ItemCount
-        {
-            get { return MenuItemModels.Count; }
-        }
+        public int ItemCount => MenuItemModels.Count;
 
-        /// <summary>
-        /// The maximum menu labels
-        /// </summary>
-        public const int MaxMenuLabels = 12;
 
-        #endregion Public properties
-
-        #region Public methods
 
         /// <summary>
         /// Moves up.
         /// </summary>
         public void MoveUp()
         {
-            //we are at the start of the list, go the end
-            if (ButtonIndex == 0 && PageIndex == 0)
+            //we are at the start of the list on the first row, go the end
+            if (ButtonIndex < PageModel.GetInstance.GridColumns && PageIndex == 0)
             {
                 //if there are no remainders show the max buttons
                 if (ItemsRemaining == 0)
                 {
-                    PageIndex = FullPageCount - 1;
-                    ButtonIndex = MaxMenuLabels - 1;
+                    PageIndex = (Math.Max(FullPageCount - 1, 0));
+                    ButtonIndex = PageModel.GetInstance.MaxMenuLabels - (PageModel.GetInstance.GridColumns - ButtonIndex);
                 }
                 else
                 {
-                    PageIndex = FullPageCount;
-                    ButtonIndex = ItemsRemaining - 1;
+                    int fullRowsInLastPage = ItemsRemaining / PageModel.GetInstance.GridColumns;
+                    int remaindersInLastPage = ItemsRemaining % PageModel.GetInstance.GridColumns;
+
+                    if (remaindersInLastPage == 0)
+                    {
+                        int lastIndex = (fullRowsInLastPage * PageModel.GetInstance.GridColumns) - (PageModel.GetInstance.GridColumns - ButtonIndex);
+                        PageIndex = FullPageCount;
+                        ButtonIndex = Math.Max(lastIndex > ItemsRemaining ? ItemsRemaining : lastIndex, 0);
+                    }
+                    else
+                    {
+                        // Start of list, move to the bottom
+                        int lastIndex = (fullRowsInLastPage * PageModel.GetInstance.GridColumns) + ButtonIndex;
+                        PageIndex = FullPageCount;
+                        ButtonIndex = Math.Max(lastIndex > (ItemsRemaining -1) ? (ItemsRemaining - 1) : lastIndex, 0);
+                    }
                 }
             }
             else
             {
-                //move up to previous page if button = 0
-                if (ButtonIndex == 0)
+                //move up to previous page if button < a row
+                if (ButtonIndex < PageModel.GetInstance.GridColumns)
                 {
                     PageIndex--;
-                    ButtonIndex = MaxMenuLabels - 1;
+                    ButtonIndex = (PageModel.GetInstance.MaxMenuLabels - PageModel.GetInstance.GridColumns) + ButtonIndex;
                 }
                 else
                 {
                     //move up page as normal
-                    ButtonIndex--;
+                    ButtonIndex -= PageModel.GetInstance.GridColumns;
                 }
             }
         }
@@ -148,26 +134,102 @@ namespace TheBox.Common.Menu
         /// </summary>
         public void MoveDown()
         {
-            //we are at the end of the list, return to the begining
-            if (PageIndex * MaxMenuLabels + ButtonIndex == MenuItemModels.Count - 1)
+            int fullRowsInLastPage = ItemsRemaining / PageModel.GetInstance.GridColumns;
+            //int remaindersInLastPageRow = ItemsRemaining % PageModel.GetInstance.GridColumns;
+
+            // on last page and row?
+            if (PageIndex == FullPageCount &&
+                ButtonIndex >= (ItemsRemaining - PageModel.GetInstance.GridColumns))
             {
-                PageIndex = 0;
-                ButtonIndex = 0;
-            }
-            else
-            {
-                //move down to next page if button = 12
-                if (ButtonIndex == MaxMenuLabels - 1)
+                // Within the remainders?
+                if (ButtonIndex >= fullRowsInLastPage * PageModel.GetInstance.GridColumns)
                 {
-                    PageIndex++;
-                    ButtonIndex = 0;
+                    int indexOnRow = ButtonIndex - (fullRowsInLastPage * PageModel.GetInstance.GridColumns);
+                    PageIndex = 0;
+                    ButtonIndex = indexOnRow;
                 }
                 else
                 {
-                    //move down page as normal
-                    ButtonIndex++;
+                    int indexOnRow = ButtonIndex - ((fullRowsInLastPage - 1) * PageModel.GetInstance.GridColumns);
+                    PageIndex = 0;
+                    ButtonIndex = indexOnRow;
                 }
             }
+            else
+            {
+                // On the last row of any other page?
+                if (ButtonIndex >= (PageModel.GetInstance.MaxMenuLabels - PageModel.GetInstance.GridColumns))
+                {
+                    int indexOnTheRow = (PageModel.GetInstance.MaxMenuLabels - PageModel.GetInstance.GridColumns) - ButtonIndex;
+
+                    PageIndex++;
+                    int newIndex = Math.Abs(indexOnTheRow);
+                    if (PageIndex == FullPageCount && newIndex >= ItemsRemaining)
+                    {
+                        newIndex = ItemsRemaining - 1;
+                    }
+                    ButtonIndex = newIndex;
+                }
+                else
+                {
+                    // go to next row
+                    ButtonIndex += PageModel.GetInstance.GridColumns;
+                }
+            }
+        }
+
+        public void MoveLeft()
+        {
+            int fullRowsInLastPage = ItemsRemaining / PageModel.GetInstance.GridColumns;
+            int remaindersInLastPage = ItemsRemaining % PageModel.GetInstance.GridColumns;
+
+            // Are we at the start of any full row?
+            if ((ButtonIndex) % PageModel.GetInstance.GridColumns == 0)
+            {
+                // last page and row?
+                if (PageIndex == FullPageCount && ButtonIndex >= (fullRowsInLastPage * PageModel.GetInstance.GridColumns))
+                {
+                    ButtonIndex = ItemsRemaining - 1;
+                    return;
+                }
+                else
+                {
+                    ButtonIndex += (PageModel.GetInstance.GridColumns - 1);
+                    return;
+                }                
+            }
+
+            // Are we on the last item?
+            if (PageIndex == FullPageCount && (ButtonIndex + 1) == ItemsRemaining &&
+                remaindersInLastPage > 0) 
+            {                
+                ButtonIndex = fullRowsInLastPage * PageModel.GetInstance.GridColumns;
+                return;
+            }
+
+            //move down page as normal
+            ButtonIndex--;
+        }
+
+        public void MoveRight()
+        {
+            // Are we at the end of any full row?
+            if ((ButtonIndex + 1) % PageModel.GetInstance.GridColumns == 0)
+            {
+                ButtonIndex -= (PageModel.GetInstance.GridColumns - 1);
+                return;
+            }
+
+            // Are we on the last item?
+            if (PageIndex == FullPageCount && (ButtonIndex + 1) == ItemsRemaining)
+            {
+                int fullRowsInLastPage = ItemsRemaining / PageModel.GetInstance.GridColumns;
+                ButtonIndex = fullRowsInLastPage * PageModel.GetInstance.GridColumns;
+                return;
+            }
+
+            //move down page as normal
+            ButtonIndex++;
         }
 
         /// <summary>
@@ -200,7 +262,10 @@ namespace TheBox.Common.Menu
         /// <returns></returns>
         public List<MenuItemModel> GetVisibleMenuItems()
         {
-            return MenuItemModels.Skip(PageIndex * MaxMenuLabels).Take(MaxMenuLabels).ToList();
+            return MenuItemModels
+                .Skip(PageIndex * PageModel.GetInstance.MaxMenuLabels)
+                .Take(PageModel.GetInstance.MaxMenuLabels)
+                .ToList();
         }
 
         /// <summary>
@@ -236,19 +301,13 @@ namespace TheBox.Common.Menu
             }
         }
 
-        #endregion Public methods
-
-        #region Private methods
-
         /// <summary>
         /// Recalculates the menu variables.
         /// </summary>
         private void RecalculateVariables()
         {
-            FullPageCount = MenuItemModels.Count / MaxMenuLabels;
-            ItemsRemaining = MenuItemModels.Count - (FullPageCount * MaxMenuLabels);
+            FullPageCount = MenuItemModels.Count / PageModel.GetInstance.MaxMenuLabels;
+            ItemsRemaining = MenuItemModels.Count - (FullPageCount * PageModel.GetInstance.MaxMenuLabels);
         }
-
-        #endregion Private methods
     }
 }

@@ -3,26 +3,17 @@
                     xmlns:Local="clr-namepsace:TheBox.Common"
                     xmlns:UI="clr-namespace:TheBox.Common.UI">
 
-    
 
-    <SolidColorBrush x:Key="DefaultBackground" Color="#FF000415" />
-    <SolidColorBrush x:Key="DefaultBlue" Color="#FF081749" />
+
+    <SolidColorBrush x:Key="DefaultBackground" Color="#141414" />
+    
+    <SolidColorBrush x:Key="DefaultBlue" Color="#111" />
     <SolidColorBrush x:Key="SpinnerColour" Color="#FF4D4DF9" />
 
+    <SolidColorBrush x:Key="Primary" Color="Red"></SolidColorBrush>
 
     <!-- top menu button (blue) -->
-    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="TopButtonColour">
-        <LinearGradientBrush.RelativeTransform>
-            <TransformGroup>
-                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                <SkewTransform CenterY="0.5" CenterX="0.5"/>
-                <RotateTransform Angle="62.65" CenterY="0.5" CenterX="0.5"/>
-                <TranslateTransform/>
-            </TransformGroup>
-        </LinearGradientBrush.RelativeTransform>
-        <GradientStop Color="#FF171B74" Offset="0.468"/>
-        <GradientStop Color="#FF0C1E61" Offset="0.546"/>
-    </LinearGradientBrush>
+    <SolidColorBrush Color="#111" Opacity="0.2" x:Key="TopButtonColour" />
 
     <!-- top menu button hover (gold) -->
     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="TopButtonHoverColour">
@@ -34,8 +25,8 @@
                 <TranslateTransform/>
             </TransformGroup>
         </LinearGradientBrush.RelativeTransform>
-        <GradientStop Color="#FFF3EA26" Offset="0.468"/>
-        <GradientStop Color="#FFFFDC00" Offset="0.546"/>
+        <GradientStop Color="#FFD8D8D8" Offset="0.468"/>
+        <GradientStop Color="#FFDEDEDE" Offset="0.546"/>
     </LinearGradientBrush>
 
     <!-- top menu button hover (silver) -->
@@ -48,8 +39,8 @@
                 <TranslateTransform/>
             </TransformGroup>
         </LinearGradientBrush.RelativeTransform>
-        <GradientStop Color="#FFA4A4A4" Offset="0.468"/>
-        <GradientStop Color="#FFB0B0B0" Offset="0.546"/>
+        <GradientStop Color="#FF848484" Offset="0.468"/>
+        <GradientStop Color="#FF808080" Offset="0.546"/>
     </LinearGradientBrush>
 
     <SolidColorBrush x:Key="TopButtonIconColour" Color="#FFDEDEDE" />
@@ -65,18 +56,33 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type UI:MetroButtonWithIcon}">
-                    <Grid Name="ButtonGrid" Background="{TemplateBinding Background}" HorizontalAlignment="Stretch">
-                        <Viewbox HorizontalAlignment="Center">
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="5">
-                                <Rectangle x:Name="ButtonRectangle" Fill="{TemplateBinding IconColour}" HorizontalAlignment="Center" Width="20" Height="20" Margin="5">
+
+                    <Grid Name="ButtonGrid" 
+                          HorizontalAlignment="Stretch" 
+                          Height="20"
+                          Margin="0"
+                          Background="{TemplateBinding Background}">
+                        <Viewbox HorizontalAlignment="Left"
+                                 >
+                            <StackPanel Orientation="Horizontal" 
+                                        Margin="0" 
+                                        HorizontalAlignment="Left">
+                                <Rectangle x:Name="ButtonRectangle" Fill="{TemplateBinding IconColour}" HorizontalAlignment="Left" Width="5" Height="5" Margin="3,3,3,3">
                                     <Rectangle.OpacityMask>
                                         <VisualBrush Stretch="Uniform" Visual="{Binding Visual, RelativeSource={RelativeSource TemplatedParent}}" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
-                                <TextBlock Text="{TemplateBinding Content}" FontSize="8" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <TextBlock Text="{TemplateBinding Content}" 
+                                                Height="6"
+                                                FontSize="4" 
+                                                Margin="3,3,15,3"
+                                                Foreground="{TemplateBinding Foreground}" 
+                                                HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center" />
                             </StackPanel>
                         </Viewbox>
                     </Grid>
+
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -112,15 +118,38 @@
 
 
 
-
+    <Style TargetType="{x:Type UI:TileButton}" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+        <Setter Property="Background" Value="Red"></Setter>
+        <Setter Property="SelectedBorderColour" Value="Transparent"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type UI:TileButton}">
+                    <Border BorderThickness="5"
+                            BorderBrush="{TemplateBinding SelectedBorderColour}">
+                        <Border BorderThickness="5"
+                                BorderBrush="Transparent">
+                            <Grid Background="{TemplateBinding Background}">
+                                <TextBlock Text="{TemplateBinding Content}"></TextBlock>
+                            </Grid>
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="SelectedBorderColour" Value="Red"></Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
 
 
 
     <!-- menu button (blue) -->
     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="MenuButtonColour">
-        <GradientStop Color="#FF0A0E55" Offset="0.468"/>
-        <GradientStop Color="#FF081749" Offset="0.546"/>
+        <GradientStop Color="#FF242424" Offset="0.468"/>
+        <GradientStop Color="#FF222222" Offset="0.546"/>
     </LinearGradientBrush>
 
     <!-- menu button (blue) odd -->

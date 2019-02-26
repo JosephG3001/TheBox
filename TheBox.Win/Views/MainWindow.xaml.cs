@@ -58,6 +58,8 @@ namespace TheBox.Win
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
 
             ForceBringToFront();
+
+            MainWindowModel.GetInstance.IsFullScreen = false;
         }
 
         private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
@@ -169,7 +171,7 @@ namespace TheBox.Win
             // ** controlling the top menu items
 
             // right arrow
-            if (e.Key == Key.Right)
+            if (e.Key == Key.Down)
             {
                 // Get the index of the selected top menu item
                 int index = MainWindowModel.GetInstance.TopMenuItemModels.Where(m => m.IsSelected).First().Index;
@@ -193,7 +195,7 @@ namespace TheBox.Win
             }
 
             // left arrow
-            if (e.Key == Key.Left)
+            if (e.Key == Key.Up)
             {
                 // Get the index of the selected top menu item
                 int index = MainWindowModel.GetInstance.TopMenuItemModels.Where(m => m.IsSelected).First().Index;

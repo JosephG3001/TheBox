@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using TheBox.Common.Models;
 
 namespace TheBox.Common.Menu
@@ -18,7 +19,7 @@ namespace TheBox.Common.Menu
         private bool _parentSelected;
         private bool _odd;
         private string _displayText;
-
+        private ImageSource tileFileName;
 
         /// <summary>
         /// Gets or sets the tag.
@@ -83,11 +84,7 @@ namespace TheBox.Common.Menu
         /// <summary>
         /// Gets or sets the relay command.  The command that will execute when the menu button is clicked or enter is pressed while selected
         /// </summary>
-        public RelayCommand RelayCommand
-        {
-            get;
-            set;
-        }
+        public RelayCommand RelayCommand { get; set; }
 
         /// <summary>
         /// Gets or sets the display text.
@@ -102,12 +99,19 @@ namespace TheBox.Common.Menu
             }
         }
 
+        public ImageSource TileFileName
+        { 
+            get { return tileFileName; }
+            set
+            {
+                tileFileName = value;
+                OnPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// Gets or sets the file path for videos, roms ect.
         /// </summary>
-        public string FilePath
-        {
-            get; set;
-        }
+        public string FilePath { get; set; }
     }
 }

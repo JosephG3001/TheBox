@@ -79,6 +79,7 @@
     <Compile Include="IWindowsEvents.cs" />
     <Compile Include="Menu\MenuEntity.cs" />
     <Compile Include="Menu\MenuItemModel.cs" />
+    <Compile Include="Models\MainUIModel.cs" />
     <Compile Include="Models\ModalModel.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\PageModel.cs" />
@@ -103,11 +104,13 @@
     </Compile>
     <Compile Include="UI\IBoxMenuButton.cs" />
     <Compile Include="UI\MetroButtonWithIcon.cs" />
+    <Compile Include="UI\TileButton.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <Resource Include="Lato-Regular.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

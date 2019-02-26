@@ -325,6 +325,24 @@ namespace TheBox.Movies
                 MediaPlayerModel.GetInstance.PreviewMedia(false);
             }
 
+            // left
+            if (e.Key == Key.Left)
+            {
+                PageModel.GetInstance.MoveLeft();
+                PageModel.GetInstance.BindItems();
+                PageModel.GetInstance.UpdatePaginationLabels();
+                MediaPlayerModel.GetInstance.PreviewMedia(false);
+            }
+
+            // right
+            if (e.Key == Key.Right)
+            {
+                PageModel.GetInstance.MoveRight();
+                PageModel.GetInstance.BindItems();
+                PageModel.GetInstance.UpdatePaginationLabels();
+                MediaPlayerModel.GetInstance.PreviewMedia(false);
+            }
+
             // enter
             if (e.Key == Key.Enter)
             {

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:UI="clr-namespace:TheBox.Common.UI;assembly=TheBox.Common"
         Title="MainWindow" 
-        Height="600" Width="800" MinHeight="600" MinWidth="800"
+        Height="600" Width="800" 
         Background="{StaticResource DefaultBackground}"
         WindowStartupLocation="CenterScreen"
         KeyDown="Window_KeyDown"
@@ -23,13 +23,12 @@
         <Style x:Key="{x:Type ListViewItem}" TargetType="ListViewItem">
             <Setter Property="SnapsToDevicePixels" Value="true"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
-            <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
-                        <Border Name="Border" Padding="2" SnapsToDevicePixels="true" Background="Transparent">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <Border Name="Border" Padding="0" SnapsToDevicePixels="true" Background="Transparent">
+                            <ContentPresenter  />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="true">
@@ -49,66 +48,83 @@
     </Window.Resources>
 
 
+    <Grid x:Name="RootGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="13*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
 
-    <Grid x:Name="RootGrid" >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="2*"></RowDefinition>
-            <RowDefinition Height="10*"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
+        
+        <Image Grid.ColumnSpan="10"
+               Grid.RowSpan="10"
+               Stretch="Fill"
+               Source="{Binding MainUIModel.BackgroundImageSource}"></Image>
+        <Grid Grid.ColumnSpan="10"
+              Grid.RowSpan="10"
+              Opacity="0.5"
+              Background="Black"></Grid>
+        
 
-
-        <Grid Grid.Row="0" Background="{StaticResource DefaultBlue}">
-            <Image Source="/Images/Logo.png" Stretch="Uniform" HorizontalAlignment="Left" Margin="5"></Image>
-            <Grid Margin="5">
-                <ListView ItemsSource="{Binding TopMenuItemModels}" HorizontalAlignment="Right" Background="Transparent" BorderThickness="0">
+        <Grid Background="#0FFFFFFF">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Viewbox Grid.Row="0">
+                <Image Source="/TheBox.Win;component/Images/logo2.png" Margin="10" />
+            </Viewbox>
+            <Viewbox Grid.Row="1">
+                <ListView ItemsSource="{Binding TopMenuItemModels}"                           
+                          HorizontalContentAlignment="Stretch"
+                          BorderThickness="0"
+                          Background="Transparent">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Viewbox>
-                                <UI:MetroButtonWithIcon Visual="{Binding IconVisual}" 
+                            <Grid>
+                                <UI:MetroButtonWithIcon 
+                                                        Visual="{Binding IconVisual}" 
                                                         IsSelected="{Binding IsSelected}" 
                                                         ParentSelected="{Binding Path=DataContext.IsTopMenuSelected, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                                        Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=Viewbox}}"
-                                                        Width="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=Viewbox}}"
-                                                        Content="{Binding TopMenuItemText}" Command="{Binding RelayCommand}">
+                                                        Content="{Binding TopMenuItemText}" 
+                                                        Command="{Binding RelayCommand}">
                                 </UI:MetroButtonWithIcon>
-
-                            </Viewbox>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid HorizontalAlignment="Left" Rows="1" Background="Transparent"
-                                     Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}" >
-                            </UniformGrid>
+                            <StackPanel ></StackPanel>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
                 </ListView>
+            </Viewbox>
+            <Grid Grid.Row="2">
+                <Viewbox HorizontalAlignment="Center">
+                    <StackPanel Orientation="Vertical">
+                        <UniformGrid Columns="2">
+                            <TextBlock Foreground="White" Text="{Binding CurrentTime}" Margin="5" />
+                            <TextBlock Foreground="White" Text="{Binding CurrentDate}" Margin="5" />
+                        </UniformGrid>
+                        <UniformGrid Columns="2" x:Name="PaginationStackPanel">
+                            <TextBlock Foreground="White" Text="{Binding ShowingItemString}" Margin="5" />
+                            <TextBlock Foreground="White" Text="{Binding ShowingPageString}" Margin="5" />
+                        </UniformGrid>
+                    </StackPanel>
+                </Viewbox>
             </Grid>
         </Grid>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Column="1">
             <ContentControl Content="{Binding ActiveUserControl}" Focusable="False"></ContentControl>
         </Grid>
 
-        <Grid Grid.Row="2" Background="{StaticResource DefaultBlue}">
-            <Viewbox HorizontalAlignment="Left">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" Margin="16">
-                        <TextBlock Foreground="White" Text="{Binding CurrentTime}" Margin="0,0,15,0" />
-                        <TextBlock Foreground="White" Text="{Binding CurrentDate}" Margin="0,0,25,0" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="16" x:Name="PaginationStackPanel">
-                        <TextBlock Foreground="White" Text="{Binding ShowingItemString}" Margin="0,0,15,0" />
-                        <TextBlock Foreground="White" Text="{Binding ShowingPageString}" Margin="0,0,15,0" />
-                    </StackPanel>
-                </StackPanel>
-            </Viewbox>
-        </Grid>
 
         <Grid Grid.ColumnSpan="5" Grid.RowSpan="5">
             <CommonControls:ModalControl></CommonControls:ModalControl>
         </Grid>
 
     </Grid>
+
+
 </Window>
