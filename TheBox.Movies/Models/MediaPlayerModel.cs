@@ -329,8 +329,19 @@ namespace TheBox.Movies.Models
         private void MoveToNextFile()
         {
             // Emulate the keydown key press on the list box.
-            PageModel.GetInstance.MoveDown();
-            PageModel.GetInstance.BindItems(true);
+            bool paginate = false;
+            if (PageModel.GetInstance.IsAtEndOfAnyRow())
+            {
+                PageModel.GetInstance.MoveRight();
+                PageModel.GetInstance.MoveDown();
+                paginate = true;
+            }
+            else
+            {
+                PageModel.GetInstance.MoveRight();
+            }
+
+            PageModel.GetInstance.BindItems(paginate);
             PageModel.GetInstance.UpdatePaginationLabels();
 
             // Keep presing down key if item is not a file.

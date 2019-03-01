@@ -314,6 +314,16 @@ namespace TheBox.Common.Models
             return paginationOccured;
         }
 
+        public bool IsAtEndOfAnyRow()
+        {
+            if ((MenuEntityModel.CurrentPageButtonIndex + 1) % GridColumns == 0 ||
+                (MenuEntityModel.ListButtonIndex + 1) == MenuEntityModel.ItemCount)
+            {
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Unselects the menuItems of the current menuEntity so that the buttons change to silver.
         /// </summary>
