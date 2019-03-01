@@ -38,6 +38,8 @@ namespace TheBox.Win.Views
 
         #region IBoxComponent implementation
 
+        public string BackgroundImageUri => "/TheBox.Win;component/Images/wall.jpg";
+
         /// <summary>
         /// Gets the activate command.  The activate command will be a delegate that should run when the component is activated.
         /// </summary>
@@ -67,7 +69,7 @@ namespace TheBox.Win.Views
             }
 
             // navigate to new menu
-            PageModel.GetInstance.NavigateForwards(menuItems);
+            PageModel.GetInstance.NavigateForwards(menuItems, 12, 1);
 
             PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);
         }
@@ -119,7 +121,7 @@ namespace TheBox.Win.Views
             if (e.Key == Key.Up)
             {
                 PageModel.GetInstance.MoveUp();
-                PageModel.GetInstance.BindItems();
+                PageModel.GetInstance.BindItems(true);
                 PageModel.GetInstance.UpdatePaginationLabels();
             }
 
@@ -127,7 +129,7 @@ namespace TheBox.Win.Views
             if (e.Key == Key.Down)
             {
                 PageModel.GetInstance.MoveDown();
-                PageModel.GetInstance.BindItems();
+                PageModel.GetInstance.BindItems(true);
                 PageModel.GetInstance.UpdatePaginationLabels();
             }
 

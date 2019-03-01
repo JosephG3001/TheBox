@@ -30,8 +30,6 @@ namespace TheBox.Movies
     /// </summary>
     public partial class MovieControl : UserControl, IBoxComponent, IBoxKeyboardControl, IWindowsEvents
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MovieControl"/> class.
         /// </summary>
@@ -68,8 +66,6 @@ namespace TheBox.Movies
             // initialise media models
             new MediaPlayerModel(axWmp);
         }
-
-        #endregion Constructors
 
         /// <summary>
         /// Handles the CacheLoadingComplete event of the FileCacheManager control.
@@ -133,7 +129,10 @@ namespace TheBox.Movies
         private void ActivateComponentCallback()
         {
             // create menuItems for root
-            GetMenuItemsForDirectory(MovieControlModel.GetInstance.MovieSettingsManager.MovieSettings.RootMediaPath, true);
+            GetMenuItemsForDirectory(
+                MovieControlModel.GetInstance.MovieSettingsManager.MovieSettings.RootMediaPath, 
+                true
+                );
 
             // fix WMP crash - don't show it until the window has finished rendering
             MediaPlayerModel.GetInstance.MediaPlayer.uiMode = "none";
@@ -156,12 +155,18 @@ namespace TheBox.Movies
                 // Get files.
                 foreach (var file in Directory.GetFiles(dir, filter))
                 {
+                    string fileName = System.IO.Path.GetFileNameWithoutExtension(file);
+
+                    // Does file have tile image?
+                    string tilePath = GetImage(file, true);
+
                     // Create the video file menu item
                     menuItems.Add(new MenuItemModel()
                     {
-                        DisplayText = System.IO.Path.GetFileNameWithoutExtension(file),
+                        DisplayText = fileName,
                         ParentSelected = true,
                         FilePath = file,
+                        TileFilePath = string.IsNullOrEmpty(tilePath) ? "" : System.IO.Path.GetFullPath(tilePath),
                         RelayCommand = new RelayCommand(() =>
                         {
                             // move focus to the mini playpanel
@@ -175,11 +180,15 @@ namespace TheBox.Movies
             // child folders
             foreach (var folder in Directory.GetDirectories(dir))
             {
+                // Does folder have tile image?
+                string tilePath = GetImage(folder, false);
+
                 // Create the child folder menu item
                 menuItems.Add(new MenuItemModel()
                 {
                     DisplayText = new DirectoryInfo(folder).Name,
                     ParentSelected = true,
+                    TileFilePath = string.IsNullOrEmpty(tilePath) ? "" : System.IO.Path.GetFullPath(tilePath),
                     RelayCommand = new RelayCommand(() =>
                     {
                         // directory so run this method again using the child directory as the parameter
@@ -208,10 +217,37 @@ namespace TheBox.Movies
             }
 
             // navigate to new menu
-            PageModel.GetInstance.NavigateForwards(menuItems);
+            if (root)
+            {
+                PageModel.GetInstance.NavigateForwards(menuItems, 3, 5);
+            }
+            else
+            {
+                PageModel.GetInstance.NavigateForwards(menuItems, 2, 6);
+            }
 
             // update the bread crumbs label
             PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);
+        }
+
+        private string GetImage(string fileOrDir, bool isFile)
+        {
+            if (isFile)
+            {
+                string fileName = System.IO.Path.GetFileNameWithoutExtension(fileOrDir);
+                string png = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), fileName + ".png");
+                string jpg = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), fileName + ".jpg");
+                if (File.Exists(png)) return png;
+                if (File.Exists(jpg)) return jpg;
+            }
+            else
+            {
+                string png = fileOrDir + ".png";
+                string jpg = fileOrDir + ".jpg";
+                if (File.Exists(png)) return png;
+                if (File.Exists(jpg)) return jpg;
+            }
+            return string.Empty;
         }
 
         /// <summary>
@@ -237,7 +273,7 @@ namespace TheBox.Movies
             });
 
             // navigate to new menu
-            PageModel.GetInstance.NavigateForwards(menuItems);
+            PageModel.GetInstance.NavigateForwards(menuItems, 12, 1);
         }
 
         /// <summary>
@@ -246,27 +282,20 @@ namespace TheBox.Movies
         /// <remarks>
         /// See http://modernuiicons.com/ for icons
         /// </remarks>
-        public string appbar_icon
-        {
-            get { return "appbar_tv"; }
-        }
+        public string appbar_icon => "appbar_tv";
 
         /// <summary>
         /// Gets the name of the component.
         /// </summary>
-        public string ComponentName
-        {
-            get { return "Movies"; }
-        }
+        public string ComponentName => "Movies";
 
         /// <summary>
         /// Gets the underlying user control.
         /// </summary>
         /// <returns></returns>
-        public UserControl GetUserControl()
-        {
-            return this;
-        }
+        public UserControl GetUserControl() => this;
+
+        public string BackgroundImageUri => "/TheBox.Movies;component/movies_wall.jpg";
 
         #endregion IBoxComponent implementation
 
@@ -288,17 +317,17 @@ namespace TheBox.Movies
 
 
             // we like the ability to skip through preview 
-            if (MediaPlayerModel.GetInstance.IsPlayingMediaPlayer())
-            {
-                if (e.Key == Key.Left ||
-                    e.Key == Key.Right ||
-                    e.Key == Key.MediaNextTrack ||
-                    e.Key == Key.N ||
-                    e.Key == Key.P || e.Key == (Key)177 || e.Key == Key.MediaPreviousTrack)
-                {
-                    MediaPlayerModel.GetInstance.HandleKeyDown(this, e);
-                }
-            }
+            //if (MediaPlayerModel.GetInstance.IsPlayingMediaPlayer())
+            //{
+            //    if (e.Key == Key.Left ||
+            //        e.Key == Key.Right ||
+            //        e.Key == Key.MediaNextTrack ||
+            //        e.Key == Key.N ||
+            //        e.Key == Key.P || e.Key == (Key)177 || e.Key == Key.MediaPreviousTrack)
+            //    {
+            //        MediaPlayerModel.GetInstance.HandleKeyDown(this, e);
+            //    }
+            //}
 
             // backspace
             if (e.Key == Key.Back)
@@ -310,8 +339,8 @@ namespace TheBox.Movies
             // up
             if (e.Key == Key.Up)
             {
-                PageModel.GetInstance.MoveUp();
-                PageModel.GetInstance.BindItems();
+                bool paginationOccured = PageModel.GetInstance.MoveUp();
+                PageModel.GetInstance.BindItems(paginationOccured);
                 PageModel.GetInstance.UpdatePaginationLabels();
                 MediaPlayerModel.GetInstance.PreviewMedia(false);
             }
@@ -319,8 +348,8 @@ namespace TheBox.Movies
             // down
             if (e.Key == Key.Down)
             {
-                PageModel.GetInstance.MoveDown();
-                PageModel.GetInstance.BindItems();
+                bool paginationOccured = PageModel.GetInstance.MoveDown();
+                PageModel.GetInstance.BindItems(paginationOccured);
                 PageModel.GetInstance.UpdatePaginationLabels();
                 MediaPlayerModel.GetInstance.PreviewMedia(false);
             }
@@ -328,8 +357,8 @@ namespace TheBox.Movies
             // left
             if (e.Key == Key.Left)
             {
-                PageModel.GetInstance.MoveLeft();
-                PageModel.GetInstance.BindItems();
+                bool paginationOccured = PageModel.GetInstance.MoveLeft();
+                PageModel.GetInstance.BindItems(paginationOccured);
                 PageModel.GetInstance.UpdatePaginationLabels();
                 MediaPlayerModel.GetInstance.PreviewMedia(false);
             }
@@ -337,8 +366,8 @@ namespace TheBox.Movies
             // right
             if (e.Key == Key.Right)
             {
-                PageModel.GetInstance.MoveRight();
-                PageModel.GetInstance.BindItems();
+                bool paginationOccured = PageModel.GetInstance.MoveRight();
+                PageModel.GetInstance.BindItems(paginationOccured);
                 PageModel.GetInstance.UpdatePaginationLabels();
                 MediaPlayerModel.GetInstance.PreviewMedia(false);
             }

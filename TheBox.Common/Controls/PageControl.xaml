@@ -20,7 +20,7 @@
                                IsSelected="{Binding IsSelected}" 
                                ParentSelected="{Binding ParentSelected}" 
                                Command="{Binding RelayCommand}" 
-                               TileImage="{Binding TileFileName}"
+                               TileImage="{Binding TileImage}"
                                Visibility="{Binding IsVisible, Converter={StaticResource BoolToCollapseConverter}}"></UI:TileButton>
                 <!--<UI:IBoxMenuButton Content="{Binding DisplayText}" 
                                            Odd="{Binding Odd}" 
@@ -35,8 +35,11 @@
         </ListView.ItemTemplate>
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
-                <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Rows="{Binding GridRows}" Columns="{Binding GridColumns}"
-                                     Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}" />
+                <UniformGrid HorizontalAlignment="Stretch" 
+                             VerticalAlignment="Stretch" 
+                             Rows="{Binding GridRows, UpdateSourceTrigger=PropertyChanged}" 
+                             Columns="{Binding GridColumns, UpdateSourceTrigger=PropertyChanged}" />
+                <!--Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"-->
             </ItemsPanelTemplate>
         </ListView.ItemsPanel>
         <ListView.ItemContainerStyle>

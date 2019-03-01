@@ -50,8 +50,8 @@
 
     <Grid x:Name="RootGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
-            <ColumnDefinition Width="13*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="17*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         
@@ -61,23 +61,24 @@
                Source="{Binding MainUIModel.BackgroundImageSource}"></Image>
         <Grid Grid.ColumnSpan="10"
               Grid.RowSpan="10"
-              Opacity="0.5"
+              Opacity="0.77"
               Background="Black"></Grid>
         
 
-        <Grid Background="#0FFFFFFF">
+        <Grid Background="#8F000000">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition Height="5*"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Viewbox Grid.Row="0">
-                <Image Source="/TheBox.Win;component/Images/logo2.png" Margin="10" />
+                <Image Source="/TheBox.Win;component/Images/logo2.png" Margin="60" />
             </Viewbox>
             <Viewbox Grid.Row="1">
-                <ListView ItemsSource="{Binding TopMenuItemModels}"                           
+                <ListView ItemsSource="{Binding TopMenuItemModels}"
                           HorizontalContentAlignment="Stretch"
                           BorderThickness="0"
+                          Focusable="False"
                           Background="Transparent">
                     <ListView.ItemTemplate>
                         <DataTemplate>

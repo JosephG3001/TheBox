@@ -76,6 +76,8 @@ namespace TheBox.Games
 
         #region IBoxComponent implementation
 
+        public string BackgroundImageUri => "/TheBox.Games;component/wall.jpg";
+
         /// <summary>
         /// Gets the activate command.  The activate command will be a delegate that should run when the component is activated.
         /// </summary>
@@ -119,7 +121,7 @@ namespace TheBox.Games
             menuItems.First().IsSelected = true;
 
             // navigate to the new emulator list
-            PageModel.GetInstance.NavigateForwards(menuItems);
+            PageModel.GetInstance.NavigateForwards(menuItems, 3, 5);
 
             ShowSystemImage();
 
@@ -167,7 +169,7 @@ namespace TheBox.Games
             }
 
             // navigate to new menu
-            PageModel.GetInstance.NavigateForwards(menuItems);
+            PageModel.GetInstance.NavigateForwards(menuItems, 12, 1);
         }
 
         /// <summary>
@@ -220,7 +222,7 @@ namespace TheBox.Games
             if (e.Key == Key.Up)
             {
                 PageModel.GetInstance.MoveUp();
-                PageModel.GetInstance.BindItems();
+                PageModel.GetInstance.BindItems(true);
                 PageModel.GetInstance.UpdatePaginationLabels();
 
                 if (PageModel.GetInstance.SelectedMenuItemModel.FilePath == null)
@@ -237,7 +239,7 @@ namespace TheBox.Games
             if (e.Key == Key.Down)
             {
                 PageModel.GetInstance.MoveDown();
-                PageModel.GetInstance.BindItems();
+                PageModel.GetInstance.BindItems(true);
                 PageModel.GetInstance.UpdatePaginationLabels();
 
                 if (PageModel.GetInstance.SelectedMenuItemModel.FilePath == null)
@@ -377,7 +379,7 @@ namespace TheBox.Games
             }
 
             // navigate to new menu
-            PageModel.GetInstance.NavigateForwards(menuItems);
+            PageModel.GetInstance.NavigateForwards(menuItems, 2, 5);
         }
 
         /// <summary>

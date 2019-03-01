@@ -59,7 +59,6 @@
 
                     <Grid Name="ButtonGrid" 
                           HorizontalAlignment="Stretch" 
-                          Height="20"
                           Margin="0"
                           Background="{TemplateBinding Background}">
                         <Viewbox HorizontalAlignment="Left"
@@ -67,18 +66,23 @@
                             <StackPanel Orientation="Horizontal" 
                                         Margin="0" 
                                         HorizontalAlignment="Left">
-                                <Rectangle x:Name="ButtonRectangle" Fill="{TemplateBinding IconColour}" HorizontalAlignment="Left" Width="5" Height="5" Margin="3,3,3,3">
+                                <Rectangle x:Name="ButtonRectangle" 
+                                           Fill="{TemplateBinding IconColour}" 
+                                           HorizontalAlignment="Left" 
+                                           Width="5" 
+                                           Height="5" 
+                                           Margin="3,3,3,3">
                                     <Rectangle.OpacityMask>
                                         <VisualBrush Stretch="Uniform" Visual="{Binding Visual, RelativeSource={RelativeSource TemplatedParent}}" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                                 <TextBlock Text="{TemplateBinding Content}" 
-                                                Height="6"
-                                                FontSize="4" 
-                                                Margin="3,3,15,3"
-                                                Foreground="{TemplateBinding Foreground}" 
-                                                HorizontalAlignment="Center" 
-                                                VerticalAlignment="Center" />
+                                            Height="6"
+                                            FontSize="4" 
+                                            Margin="3,3,15,3"
+                                            Foreground="{TemplateBinding Foreground}" 
+                                            HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center" />
                             </StackPanel>
                         </Viewbox>
                     </Grid>
@@ -119,7 +123,16 @@
 
 
     <Style TargetType="{x:Type UI:TileButton}" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-        <Setter Property="Background" Value="Red"></Setter>
+        <Setter Property="Background">
+            <Setter.Value>
+                <RadialGradientBrush>
+                    <GradientStop Color="#FF373737"/>
+                    <GradientStop Color="#FF434343" Offset="1"/>
+                </RadialGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <!--<Setter Property="Background" Value="DarkGray"></Setter>-->
+        <Setter Property="Foreground" Value="White"></Setter>
         <Setter Property="SelectedBorderColour" Value="Transparent"></Setter>
         <Setter Property="Template">
             <Setter.Value>
@@ -128,8 +141,42 @@
                             BorderBrush="{TemplateBinding SelectedBorderColour}">
                         <Border BorderThickness="5"
                                 BorderBrush="Transparent">
-                            <Grid Background="{TemplateBinding Background}">
-                                <TextBlock Text="{TemplateBinding Content}"></TextBlock>
+                            <Grid Name="OuterGrid">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <!--<Grid 
+                                          Width="100"
+                                            Height="100">
+                                        <Grid.Background>
+                                            <ImageBrush  ImageSource="{TemplateBinding TileImage}" Stretch="Fill"></ImageBrush>
+                                        </Grid.Background>
+                                    </Grid>-->
+
+                                    <Viewbox Stretch="Fill"
+                                             HorizontalAlignment="Stretch">
+                                        <!--Width="{Binding ElementName=OuterGrid,Path=ActualWidth}"
+                                           Height="{Binding ElementName=OuterGrid,Path=ActualHeight}"-->
+                                    <Image Source="{TemplateBinding TileImage}"                                
+                                           StretchDirection="Both"
+                                           HorizontalAlignment="Stretch"
+                                           Width="50"
+                                           Stretch="UniformToFill" 
+                                           ></Image>
+                                    </Viewbox>
+                                    <Viewbox Stretch="UniformToFill">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="{TemplateBinding Content}" 
+                                                   Height="60"
+                                                   Width="60"
+                                                   FontSize="5"
+                                                   Margin="0"                                                   
+                                                   Foreground="{TemplateBinding Foreground}" 
+                                                   HorizontalAlignment="Left"
+                                                   TextAlignment="Left"
+                                                   TextWrapping="Wrap"
+                                                   VerticalAlignment="Top" />
+                                        </StackPanel>
+                                    </Viewbox>
+                                </Grid>
                             </Grid>
                         </Border>
                     </Border>
@@ -159,11 +206,16 @@
     </LinearGradientBrush>
 
     <!-- menu button hover (gold) -->
-    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="MenuButtonHoverColour">
+    <!--<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="MenuButtonHoverColour">
         <GradientStop Color="#FFE4DA18" Offset="0.468"/>
         <GradientStop Color="#FFEACA00" Offset="0.546"/>
+    </LinearGradientBrush>-->
+    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="MenuButtonHoverColour">
+        <GradientStop Color="#f71515 " Offset="0.468"/>
+        <GradientStop Color="#d90000 " Offset="0.546"/>
     </LinearGradientBrush>
-
+    
+    
     <!-- menu button hover (silver) -->
     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="MenuButtonHoverNotSelectedColour">
         <GradientStop Color="#FFA4A4A4" Offset="0.468"/>
@@ -179,7 +231,10 @@
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{TemplateBinding Background}" Margin="2">
                         <Grid HorizontalAlignment="Left">
                             <Viewbox HorizontalAlignment="Stretch">
-                                <TextBlock Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Left" Margin="4" Text="{TemplateBinding Content}" />
+                                <TextBlock Foreground="{TemplateBinding Foreground}" 
+                                           HorizontalAlignment="Left" 
+                                           Margin="4" 
+                                           Text="{TemplateBinding Content}" />
                             </Viewbox>
                         </Grid>
                     </Grid>
@@ -197,7 +252,7 @@
                     <Condition Property="ParentSelected" Value="True" />
                 </MultiTrigger.Conditions>
                 <Setter Property="Background" Value="{StaticResource MenuButtonHoverColour}" />
-                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="Foreground" Value="White" />
             </MultiTrigger>
             <!-- Silver -->
             <MultiTrigger>

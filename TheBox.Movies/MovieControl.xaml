@@ -23,39 +23,51 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="6*"></RowDefinition>
             <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
         </Grid.RowDefinitions>
-        <!--<CommonControls:BreadCrumbControl ></CommonControls:BreadCrumbControl>-->
 
-        <Grid>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
             
-            
-            <Grid Grid.Row="0" 
-                      x:Name="mediaPlayerGrid" 
-                      Background="Black" 
-                      Visibility="Hidden"
-                      Margin="0,0,0,5">
+            <Grid Grid.Column="0"
+                  Grid.ColumnSpan="3"   
+                  Grid.Row="2"
+                  Margin="10"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Bottom">
+                <Viewbox>
+                    <local:PlayPanelControl x:Name="PlayPanel"></local:PlayPanelControl>
+                </Viewbox>
             </Grid>
 
-            <Grid Grid.Row="1" Margin="0,5,0,0">
-                <local:PlayPanelControl  x:Name="PlayPanel" ></local:PlayPanelControl>
+            <Grid Grid.RowSpan="5"
+                  Grid.Column="2"
+                  Grid.ColumnSpan="3"
+                  x:Name="mediaPlayerGrid" 
+                  Background="Black" 
+                  Visibility="Hidden"
+                  Margin="10,0,0,5">
             </Grid>
-
         </Grid>
-        
-        
-        <Grid Grid.Row="1" Margin="10,0,10,15">
-            <CommonControls:PageControl ></CommonControls:PageControl>
 
-            <Grid Grid.Column="1" Margin="15, 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
+        <CommonControls:BreadCrumbControl Grid.Row="1" Margin="10,0"></CommonControls:BreadCrumbControl>
 
-                
-            </Grid>
+        <Grid Grid.Row="2" 
+              Grid.RowSpan="3"
+              Margin="10">
+            <CommonControls:PageControl></CommonControls:PageControl>
         </Grid>
     </Grid>
 

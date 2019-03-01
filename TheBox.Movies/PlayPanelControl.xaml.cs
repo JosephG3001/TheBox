@@ -49,8 +49,8 @@ namespace TheBox.Movies
             }
 
             // we like the ability to skip through preview 
-            if (e.Key == Key.Left || 
-                e.Key == Key.Right ||
+            if (//e.Key == Key.Left || 
+                //e.Key == Key.Right ||
                 e.Key == Key.MediaNextTrack || 
                 e.Key == Key.N ||
                 e.Key == Key.P || e.Key == (Key)177)
@@ -58,7 +58,6 @@ namespace TheBox.Movies
                 MediaPlayerModel.GetInstance.HandleKeyDown(this, e);
             }
 
-            // backspace
             if (e.Key == Key.Back)
             {
                 // move back to the main video menu
@@ -67,22 +66,29 @@ namespace TheBox.Movies
 
                 // reset the play panel options menu
                 MovieControlModel.GetInstance.PlayOptionsMenu.UnselectButtons();
-                MovieControlModel.GetInstance.PlayOptionsMenu.ButtonIndex = 0;
+                MovieControlModel.GetInstance.PlayOptionsMenu.CurrentPageButtonIndex = 0;
             }
 
-            // up
             if (e.Key == Key.Up)
             {
                 MovieControlModel.GetInstance.PlayOptionsMenu.MoveUp();
             }
 
-            // down
             if (e.Key == Key.Down)
             {
                 MovieControlModel.GetInstance.PlayOptionsMenu.MoveDown();
             }
 
-            // enter
+            if (e.Key == Key.Left)
+            {
+                MovieControlModel.GetInstance.PlayOptionsMenu.MoveLeft();
+            }
+
+            if (e.Key == Key.Right)
+            {
+                MovieControlModel.GetInstance.PlayOptionsMenu.MoveRight();
+            }
+
             if (e.Key == Key.Enter)
             {
                 // play using the selected menu items play option

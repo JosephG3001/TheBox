@@ -99,6 +99,15 @@ namespace TheBox.Movies.Models
 
                     if (FileCacheManager.VideoFileExtensions.Contains(ext))
                     {
+                        //for (int i = 0; i < 400; i++)
+                        //{
+                        //    if (CheckPreviewCancel(ct))
+                        //    {
+                        //        return;
+                        //    }
+                        //    Thread.Sleep(10);
+                        //}
+
                         if (CheckPreviewCancel(ct))
                         {
                             return;
@@ -167,7 +176,7 @@ namespace TheBox.Movies.Models
         /// <returns></returns>
         private bool CheckPreviewCancel(CancellationToken ct)
         {
-            Thread.Sleep(400);
+            Thread.Sleep(1200);
             if (ct.IsCancellationRequested)
             {
                 return true;

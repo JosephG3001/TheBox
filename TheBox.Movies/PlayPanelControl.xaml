@@ -22,17 +22,19 @@
                     <UI:IBoxMenuButton Content="{Binding DisplayText}" 
                                            Odd="{Binding Odd}" 
                                            IsSelected="{Binding IsSelected}" 
-                                           ParentSelected="{Binding ParentSelected}" 
+                                           ParentSelected="{Binding ParentSelected}"                                        
                                            Command="{Binding RelayCommand}" 
                                            Visibility="{Binding IsVisible, Converter={StaticResource BoolToCollapseConverter}}"
-                                           Margin="1">
+                                           Margin="0">
                     </UI:IBoxMenuButton>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Rows="6" Columns="1"
-                                     Height="{Binding (FrameworkElement.ActualHeight), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}" />
+                    <UniformGrid HorizontalAlignment="Stretch" 
+                                 VerticalAlignment="Stretch" 
+                                 Rows="1" 
+                                 Columns="4" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListView.ItemContainerStyle>

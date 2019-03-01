@@ -59,7 +59,9 @@ namespace TheBox.Win
 
             ForceBringToFront();
 
-            MainWindowModel.GetInstance.IsFullScreen = false;
+            SetBackGroundImage();
+
+         //   MainWindowModel.GetInstance.IsFullScreen = false;
         }
 
         private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
@@ -191,6 +193,8 @@ namespace TheBox.Win
                 {
                     MainWindowModel.GetInstance.TopMenuItemModels.Where(m => m.Index == index + 1).First().IsSelected = true;
                 }
+
+                SetBackGroundImage();
                 return;
             }
 
@@ -215,6 +219,7 @@ namespace TheBox.Win
                 {
                     MainWindowModel.GetInstance.TopMenuItemModels.Where(m => m.Index == index - 1).First().IsSelected = true;
                 }
+                SetBackGroundImage();
                 return;
             }
 
@@ -238,6 +243,16 @@ namespace TheBox.Win
                 selected.RelayCommand.Execute(null);
                 return;
             }
+        }
+
+        private void SetBackGroundImage()
+        {
+            var vm = MainWindowModel.GetInstance.TopMenuItemModels.Where(m => m.IsSelected).Single();
+            BitmapImage logo = new BitmapImage();
+            logo.BeginInit();
+            logo.UriSource = new Uri(vm.BackgroundImageUri, uriKind: UriKind.RelativeOrAbsolute);
+            logo.EndInit();
+            MainUIModel.Instance.BackgroundImageSource = logo;
         }
 
         [DllImport("User32.dll")]

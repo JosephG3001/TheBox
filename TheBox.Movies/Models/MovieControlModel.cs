@@ -152,7 +152,7 @@ namespace TheBox.Movies.Models
         private void CreatePlayOptionsMenu()
         {
             // new menuEntity for play options
-            PlayOptionsMenu = new MenuEntity();
+            PlayOptionsMenu = new MenuEntity(1, 4);
 
             // Play button
             PlayOptionsMenu.AddMenuItemModel(new MenuItemModel()

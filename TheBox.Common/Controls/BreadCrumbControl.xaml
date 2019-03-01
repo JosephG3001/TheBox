@@ -9,7 +9,12 @@
     
     <Grid HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Margin="10,10,10,0" >
         <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center">
-            <TextBlock FontFamily="Consolas" Text="{Binding BreadCumbs}" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+            <TextBlock 
+                       Text="{Binding BreadCumbs}" 
+                       Foreground="White" 
+                       HorizontalAlignment="Stretch" 
+                       VerticalAlignment="Center" />
+            <!--FontFamily="Consolas"-->
         </Viewbox>
     </Grid>
     

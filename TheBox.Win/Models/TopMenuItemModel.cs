@@ -16,8 +16,6 @@ namespace TheBox.Win.Models
     /// </summary>
     public class TopMenuItemModel : ModelBase
     {
-        #region Notify Properties
-
         private string _iconString;
         private bool _isSelected;
         private string _topMenuItemText;
@@ -48,16 +46,10 @@ namespace TheBox.Win.Models
             }
         }
 
-        #endregion Notify Properties
-
         /// <summary>
         /// Gets the action.
         /// </summary>
-        public RelayCommand RelayCommand
-        {
-            get;
-            private set;
-        }
+        public RelayCommand RelayCommand { get; private set; }
 
         /// <summary>
         /// Gets the icon.
@@ -73,20 +65,14 @@ namespace TheBox.Win.Models
         /// <summary>
         /// Gets or sets the index.
         /// </summary>
-        public int Index
-        {
-            get;
-            set;
-        }
+        public int Index { get; set; }
 
         /// <summary>
         /// Gets the component.
         /// </summary>
-        public IBoxComponent Component
-        {
-            get;
-            private set;
-        }
+        public IBoxComponent Component { get; private set; }
+
+        public string BackgroundImageUri { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TopMenuItemModel" /> class.
@@ -95,13 +81,20 @@ namespace TheBox.Win.Models
         /// <param name="action">The action.</param>
         /// <param name="icon">The icon.</param>
         /// <param name="index">The index.</param>
-        public TopMenuItemModel(IBoxComponent component, string topMenuItemText, Action action, string icon, int index)
+        public TopMenuItemModel(
+            IBoxComponent component,
+            string topMenuItemText, 
+            Action action, 
+            string icon, 
+            int index,
+            string backgroundImageUri)
         {
             this.Component = component;
             this.TopMenuItemText = topMenuItemText;
             this.RelayCommand = new RelayCommand(action);
             this._iconString = icon;
             this.Index = index;
+            this.BackgroundImageUri = backgroundImageUri;
         }
     }
 }

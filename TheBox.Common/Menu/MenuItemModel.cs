@@ -19,7 +19,7 @@ namespace TheBox.Common.Menu
         private bool _parentSelected;
         private bool _odd;
         private string _displayText;
-        private ImageSource tileFileName;
+        private ImageSource tileImage;
 
         /// <summary>
         /// Gets or sets the tag.
@@ -99,19 +99,21 @@ namespace TheBox.Common.Menu
             }
         }
 
-        public ImageSource TileFileName
+        public ImageSource TileImage
         { 
-            get { return tileFileName; }
+            get { return tileImage; }
             set
             {
-                tileFileName = value;
+                tileImage = value;
                 OnPropertyChanged();
             }
         }
 
+        public string TileFilePath { get; set; }
+
         /// <summary>
         /// Gets or sets the file path for videos, roms ect.
         /// </summary>
-        public string FilePath { get; set; }
+        public string FilePath { get; set; }        
     }
 }

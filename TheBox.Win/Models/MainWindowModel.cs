@@ -155,18 +155,50 @@ namespace TheBox.Win.Models
             foreach (var com in PluginFactory.GetInstance.Plugins)
             {
                 // add new topMenuItemModel for the plugin
-                model.TopMenuItemModels.Add(new TopMenuItemModel(com, com.ComponentName, com.ActivateComponent, com.appbar_icon, model.TopMenuItemModels.Count + 1));
+                model.TopMenuItemModels.Add(
+                    new TopMenuItemModel(
+                        com, 
+                        com.ComponentName, 
+                        com.ActivateComponent, 
+                        com.appbar_icon,
+                        model.TopMenuItemModels.Count + 1,
+                        com.BackgroundImageUri));
             }
 
             // Add the settings button & initialise settings control
             IBoxKeyboardControl settingsControl = new SettingsControl();
-            model.TopMenuItemModels.Add(new TopMenuItemModel((IBoxComponent)settingsControl, "Settings", () => { }, "appbar_cog", model.TopMenuItemModels.Count + 1));
+            model.TopMenuItemModels.Add(
+                new TopMenuItemModel(
+                    (IBoxComponent)settingsControl, 
+                    "Settings", 
+                    () => { }, 
+                    "appbar_cog", 
+                    model.TopMenuItemModels.Count + 1,
+                    ((IBoxComponent)settingsControl).BackgroundImageUri)
+                    );
+
 
             // Add the toggle fullscreen button
-            model.TopMenuItemModels.Add(new TopMenuItemModel(null, "Fullscreen", () => { model.IsFullScreen = !model.IsFullScreen; }, "appbar_fullscreen_box", model.TopMenuItemModels.Count + 1));
+            model.TopMenuItemModels.Add(new TopMenuItemModel(
+                null, 
+                "Fullscreen", 
+                () => { model.IsFullScreen = !model.IsFullScreen; }, 
+                "appbar_fullscreen_box", 
+                model.TopMenuItemModels.Count + 1,
+                string.Empty)
+                );
+
 
             // Add the close button
-            model.TopMenuItemModels.Add(new TopMenuItemModel(null, "Close", () => { Application.Current.Shutdown(); }, "appbar_door_leave", model.TopMenuItemModels.Count + 1));
+            model.TopMenuItemModels.Add(new TopMenuItemModel(
+                null, 
+                "Close", 
+                () => { Application.Current.Shutdown(); }, 
+                "appbar_door_leave", 
+                model.TopMenuItemModels.Count + 1,
+                string.Empty)
+                );
+
 
             // select the first top menu item
             model.TopMenuItemModels.FirstOrDefault().IsSelected = true;

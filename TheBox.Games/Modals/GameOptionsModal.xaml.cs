@@ -62,7 +62,7 @@ namespace TheBox.Games.Modals
         /// </summary>
         private void CreateGameOptionsMenu()
         {
-            this.GameOptionsMenu = new MenuEntity();
+            this.GameOptionsMenu = new MenuEntity(12, 1);
 
             // Play game option
             GameOptionsMenu.AddMenuItemModel(new MenuItemModel() {

@@ -182,7 +182,7 @@ namespace TheBox.Movies.TVSchedule
                         }
 
                         // navigate to the new menuEntity
-                        PageModel.GetInstance.NavigateForwards(menuItems);
+                        PageModel.GetInstance.NavigateForwards(menuItems, 3, 5);
 
                         // remove the "Downloading TV Schedule" modal
                         ModalModel.GetInstance.ModalUserControl = null;
@@ -248,7 +248,7 @@ namespace TheBox.Movies.TVSchedule
                 this.Dispatcher.Invoke(() =>
                 {
                     // navigate to the new menuEntity
-                    PageModel.GetInstance.NavigateForwards(menuItems);
+                    PageModel.GetInstance.NavigateForwards(menuItems, 3, 5);
 
                     // remove the "Scanning for Matches" modal
                     ModalModel.GetInstance.ModalUserControl = null;
@@ -317,7 +317,7 @@ namespace TheBox.Movies.TVSchedule
                                 {
 
                                     // navigate to the list of files
-                                    PageModel.GetInstance.NavigateForwards(matches);
+                                    PageModel.GetInstance.NavigateForwards(matches, 3, 5);
 
                                     // update the bread crumbs label
                                     PageModel.GetInstance.DoBreadCrumbs(this._componentName);

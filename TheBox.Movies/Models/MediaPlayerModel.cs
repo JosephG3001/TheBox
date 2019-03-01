@@ -330,7 +330,7 @@ namespace TheBox.Movies.Models
         {
             // Emulate the keydown key press on the list box.
             PageModel.GetInstance.MoveDown();
-            PageModel.GetInstance.BindItems();
+            PageModel.GetInstance.BindItems(true);
             PageModel.GetInstance.UpdatePaginationLabels();
 
             // Keep presing down key if item is not a file.
@@ -361,7 +361,7 @@ namespace TheBox.Movies.Models
             for (int i = 0; i < moves; i++)
             {
                 PageModel.GetInstance.MoveDown();
-                PageModel.GetInstance.BindItems();
+                PageModel.GetInstance.BindItems(true);
                 PageModel.GetInstance.UpdatePaginationLabels();
                 Thread.Sleep(10);
             }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 using TheBox.Common.Menu;
 
 namespace TheBox.Common
@@ -46,5 +47,8 @@ namespace TheBox.Common
         /// </summary>
         /// <returns></returns>
         void NavigateToSettings();
+
+
+        string BackgroundImageUri { get; }
     }
 }

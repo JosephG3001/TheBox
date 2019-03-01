@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using TheBox.Common.Menu;
 
 namespace TheBox.Common.Models
@@ -54,20 +55,9 @@ namespace TheBox.Common.Models
         public event EventHandler MovedRight;
 
         /// <summary>
-        /// The maximum menu labels
-        /// </summary>
-        public int MaxMenuLabels => 15;
-
-        public int GridRows => 3;
-
-        public int GridColumns => 5;
-
-        /// <summary>
         /// The _bread crumbs
         /// </summary>
         private string _breadCrumbs;
-
-        #region Public Properties
 
         /// <summary>
         /// Gets the menu entity models.
@@ -121,10 +111,7 @@ namespace TheBox.Common.Models
         /// <summary>
         /// Gets the menu item models.  Only 1 copy of this please.
         /// </summary>
-        public ObservableCollection<MenuItemModel> VisibleMenuItemModels
-        {
-            get; set;
-        }
+        public ObservableCollection<MenuItemModel> VisibleMenuItemModels { get; set; }
 
         /// <summary>
         /// Gets or sets the menu entity model.  This is current active menu.
@@ -149,20 +136,23 @@ namespace TheBox.Common.Models
             }
         }
 
-        #endregion Public Properties
+        
+        public int GridRows => MenuEntityModel == null ? 0 : MenuEntityModel.GridRows;
+        public int GridColumns => MenuEntityModel == null ? 0 : MenuEntityModel.GridColumns;
 
         /// <summary>
         /// Binds the items. Gets 12 menu items from the main menuitem list.
         /// </summary>
-        public void BindItems()
+        public void BindItems(bool updateTiles)
         {
             // use the same 12 items for binding to prevent memory leak
             if (VisibleMenuItemModels.Count == 0)
             {
                 // create 12 menu items
-                for (int i = 0; i < MaxMenuLabels; i++)
+                for (int i = 0; i < 40; i++)
                 {
-                    VisibleMenuItemModels.Add(new MenuItemModel() {
+                    VisibleMenuItemModels.Add(new MenuItemModel()
+                    {
                         IsVisible = false,
                         RelayCommand = new RelayCommand(() => { })
                     });
@@ -170,10 +160,15 @@ namespace TheBox.Common.Models
             }
             else
             {
-                for (int i = 0; i < MaxMenuLabels; i++)
+                for (int i = 0; i < 40; i++)
                 {
                     // hide them all before we bind
                     VisibleMenuItemModels[i].IsVisible = false;
+
+                    if (updateTiles)
+                    {
+                        VisibleMenuItemModels[i].TileImage = null;
+                    }
                 }
             }
 
@@ -182,30 +177,54 @@ namespace TheBox.Common.Models
                 int index = 0;
                 foreach (var menuItem in MenuEntityModel.GetVisibleMenuItems())
                 {
+                    if (updateTiles)
+                    {
+                        if (!string.IsNullOrEmpty(menuItem.TileFilePath))
+                        {
+                            VisibleMenuItemModels[index].DisplayText = string.Empty;
+                            var vm = VisibleMenuItemModels[index];
+
+                            Task.Run(() =>
+                            {
+                                BitmapImage logo = new BitmapImage();
+                                logo.BeginInit();
+                                logo.UriSource = new Uri(menuItem.TileFilePath, uriKind: UriKind.RelativeOrAbsolute);
+                                logo.EndInit();
+                                logo.Freeze();
+                                return logo;
+                            }).ContinueWith(r =>
+                            {
+                                vm.TileImage = r.Result;
+                            });
+                        }
+                        else
+                        {
+                            VisibleMenuItemModels[index].DisplayText = menuItem.DisplayText.Length > 80 ? (menuItem.DisplayText.Substring(0, 79) + "..") : menuItem.DisplayText;
+                        }
+                    }
+
                     VisibleMenuItemModels[index].IsVisible = true;
-                    VisibleMenuItemModels[index].DisplayText = menuItem.DisplayText.Length > 80 ? (menuItem.DisplayText.Substring(0, 79) + "..") : menuItem.DisplayText;
                     VisibleMenuItemModels[index].IsSelected = menuItem.IsSelected;
                     VisibleMenuItemModels[index].ParentSelected = menuItem.ParentSelected;
                     VisibleMenuItemModels[index].RelayCommand.action = menuItem.RelayCommand.action;
                     VisibleMenuItemModels[index].FilePath = menuItem.FilePath;
+
                     index++;
                 }
             }
-            //VisibleMenuItemModels.Clear();
-            //if (MenuEntityModel != null)
-            //{
-            //    MenuEntityModel.GetVisibleMenuItems().ForEach(m => VisibleMenuItemModels.Add(m));
-            //}
+
+            OnPropertyChanged(nameof(GridRows));
+            OnPropertyChanged(nameof(GridColumns));
         }
 
         /// <summary>
         /// Navigates to a new menu.
         /// </summary>
         /// <param name="menuItems">The menu items.</param>
-        public void NavigateForwards(List<MenuItemModel> menuItems)
+        public void NavigateForwards(List<MenuItemModel> menuItems, int gridRows, int gridColumns)
         {
             // new menuentity
-            MenuEntity newMenuEntity = new MenuEntity();
+            var newMenuEntity = new MenuEntity(gridRows, gridColumns);
 
             if (menuItems.Count == 0)
             {
@@ -220,7 +239,7 @@ namespace TheBox.Common.Models
             _previousMenuEntityModels.Add(newMenuEntity);
 
             // update view
-            BindItems();
+            BindItems(true);
 
             NavigatedForwards?.Invoke(this, EventArgs.Empty);
             Moved?.Invoke(this, EventArgs.Empty);
@@ -236,7 +255,7 @@ namespace TheBox.Common.Models
             if (_previousMenuEntityModels.Count > 0)
             {
                 _previousMenuEntityModels.RemoveAt(_previousMenuEntityModels.Count - 1);
-                BindItems();
+                BindItems(true);
             }
 
             if (_previousMenuEntityModels.Count == 0 && NoMoreMenuEntities != null)
@@ -254,41 +273,45 @@ namespace TheBox.Common.Models
         /// <summary>
         /// Moves up within the current menu.
         /// </summary>
-        public void MoveUp()
+        public bool MoveUp()
         {
-            MenuEntityModel.MoveUp();
+            bool paginationOccured = MenuEntityModel.MoveUp();
             MovedUp?.Invoke(this, EventArgs.Empty);
             Moved?.Invoke(this, EventArgs.Empty);
+            return paginationOccured;
         }
 
         /// <summary>
         /// Moves down within the current menu.
         /// </summary>
-        public void MoveDown()
+        public bool MoveDown()
         {
-            MenuEntityModel.MoveDown();
+            bool paginationOccured = MenuEntityModel.MoveDown();
             MovedDown?.Invoke(this, EventArgs.Empty);
             Moved?.Invoke(this, EventArgs.Empty);
+            return paginationOccured;
         }
 
         /// <summary>
         /// Moves up within the current menu.
         /// </summary>
-        public void MoveLeft()
+        public bool MoveLeft()
         {
-            MenuEntityModel.MoveLeft();
+            bool paginationOccured = MenuEntityModel.MoveLeft();
             MovedLeft?.Invoke(this, EventArgs.Empty);
             Moved?.Invoke(this, EventArgs.Empty);
+            return paginationOccured;
         }
 
         /// <summary>
         /// Moves down within the current menu.
         /// </summary>
-        public void MoveRight()
+        public bool MoveRight()
         {
-            MenuEntityModel.MoveRight();
+            bool paginationOccured = MenuEntityModel.MoveRight();
             MovedRight?.Invoke(this, EventArgs.Empty);
             Moved?.Invoke(this, EventArgs.Empty);
+            return paginationOccured;
         }
 
         /// <summary>
@@ -352,13 +375,14 @@ namespace TheBox.Common.Models
             MenuEntity menu = PageModel.GetInstance.MenuEntityModel;
             if (menu != null)
             {
-                _currentItem = (menu.ButtonIndex + 1) + (menu.PageIndex * MaxMenuLabels);
+                _currentItem = (menu.CurrentPageButtonIndex + 1) + (menu.PageIndex * menu.MaxMenuLabels);
                 _itemCount = menu.ItemCount;
                 _currentPage = (menu.PageIndex + 1);
                 _pageCount = menu.FullPageCount + (menu.ItemsRemaining > 0 ? 1 : 0);
 
-                OnPropertyChanged("ShowingItemString");
-                OnPropertyChanged("ShowingPageString");
+                OnPropertyChanged(nameof(ShowingItemString));
+                OnPropertyChanged(nameof(ShowingPageString));
+
             }
         }
 
@@ -372,8 +396,8 @@ namespace TheBox.Common.Models
             _currentPage = 0;
             _pageCount = 0;
 
-            OnPropertyChanged("ShowingItemString");
-            OnPropertyChanged("ShowingPageString");
+            OnPropertyChanged(nameof(ShowingItemString));
+            OnPropertyChanged(nameof(ShowingPageString));
         }
     }
 }
