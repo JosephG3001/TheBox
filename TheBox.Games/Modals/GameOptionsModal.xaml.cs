@@ -75,15 +75,15 @@ namespace TheBox.Games.Modals
             });
 
             // Save current cover option
-            GameOptionsMenu.AddMenuItemModel(new MenuItemModel()
-            {
-                DisplayText = "Save Current Cover",
-                IsSelected = false,
-                ParentSelected = true,
-                RelayCommand = new RelayCommand(() => {
+            //GameOptionsMenu.AddMenuItemModel(new MenuItemModel()
+            //{
+            //    DisplayText = "Save Current Cover",
+            //    IsSelected = false,
+            //    ParentSelected = true,
+            //    RelayCommand = new RelayCommand(() => {
 
-                })
-            });
+            //    })
+            //});
 
         }
 
@@ -144,7 +144,7 @@ namespace TheBox.Games.Modals
             using (FileStream stream = new FileStream(imagePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Delete))
             {
                 var encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create((BitmapSource)GameControl.GetInstance.GameImageGrid.Source));
+              //  encoder.Frames.Add(BitmapFrame.Create((BitmapSource)GameControl.GetInstance.GameImageGrid.Source));
                 encoder.Save(stream);
             }
 

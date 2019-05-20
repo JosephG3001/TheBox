@@ -20,10 +20,15 @@
     </UserControl.Resources>
 
     <Grid Margin="10">
-        <Viewbox VerticalAlignment="Center">
-            <ListView x:Name="GameOptionsListView" Background="Transparent"
+        <Viewbox VerticalAlignment="Center"
+                 Stretch="Fill">
+
+            <ListView x:Name="GameOptionsListView"
                       ItemsSource="{Binding GameOptionsMenu.MenuItemModels}"
-                      HorizontalAlignment="Stretch" BorderThickness="0" VerticalAlignment="Center">
+                      HorizontalAlignment="Stretch" 
+                      BorderThickness="0" 
+                      Background="Transparent"
+                      VerticalAlignment="Center">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <UI:IBoxMenuButton Content="{Binding DisplayText}" 
@@ -31,7 +36,8 @@
                                            IsSelected="{Binding IsSelected}" 
                                            ParentSelected="{Binding ParentSelected}" 
                                            Command="{Binding RelayCommand}"
-                                           
+                                           TextAlignment="Center"
+                                           MinWidth="100" 
                                            Margin="1">
                         </UI:IBoxMenuButton>
                     </DataTemplate>

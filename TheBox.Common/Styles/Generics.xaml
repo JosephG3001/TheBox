@@ -163,18 +163,21 @@
                                            ></Image>
                                     </Viewbox>
                                     <Viewbox Stretch="UniformToFill">
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="{TemplateBinding Content}" 
-                                                   Height="60"
-                                                   Width="60"
-                                                   FontSize="5"
-                                                   Margin="0"                                                   
-                                                   Foreground="{TemplateBinding Foreground}" 
-                                                   HorizontalAlignment="Left"
-                                                   TextAlignment="Left"
-                                                   TextWrapping="Wrap"
-                                                   VerticalAlignment="Top" />
-                                        </StackPanel>
+                                        <DockPanel Width="100"
+                                                   >
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock Text="{TemplateBinding Content}" 
+                                                       Height="60"
+                                                       Width="40"
+                                                       FontSize="5"
+                                                       Margin="0"                                                   
+                                                       Foreground="{TemplateBinding Foreground}" 
+                                                       HorizontalAlignment="Left"
+                                                       TextAlignment="Left"
+                                                       TextWrapping="Wrap"
+                                                       VerticalAlignment="Top" />
+                                            </StackPanel>
+                                        </DockPanel>
                                     </Viewbox>
                                 </Grid>
                             </Grid>
@@ -232,7 +235,7 @@
                         <Grid HorizontalAlignment="Left">
                             <Viewbox HorizontalAlignment="Stretch">
                                 <TextBlock Foreground="{TemplateBinding Foreground}" 
-                                           HorizontalAlignment="Left" 
+                                           HorizontalAlignment="{TemplateBinding TextAlignment}" 
                                            Margin="4" 
                                            Text="{TemplateBinding Content}" />
                             </Viewbox>

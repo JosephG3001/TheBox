@@ -67,9 +67,9 @@ namespace TheBox.Games
             InitializeComponent();
 
             // set this gameControl's datacontext to the singleton PageModel
-            this.ImageGrid.DataContext = GameControlModel.GetInstance;
-            this.GameImageGrid.DataContext = GameControlModel.GetInstance;
-            this.EllipseGrid.DataContext = GameControlModel.GetInstance;
+            //this.ImageGrid.DataContext = GameControlModel.GetInstance;
+            //this.GameImageGrid.DataContext = GameControlModel.GetInstance;
+            //this.EllipseGrid.DataContext = GameControlModel.GetInstance;
         }
 
         #endregion Constructors
@@ -109,6 +109,7 @@ namespace TheBox.Games
                     IsSelected = false,
                     IsVisible = true,
                     ParentSelected = true,
+                    TileFilePath = setting.ConsoleImagePath,
                     Tag = setting,
                     RelayCommand = new RelayCommand(() =>
                     {
@@ -123,7 +124,7 @@ namespace TheBox.Games
             // navigate to the new emulator list
             PageModel.GetInstance.NavigateForwards(menuItems, 3, 5);
 
-            ShowSystemImage();
+            //ShowSystemImage();
 
             PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);
         }
@@ -211,94 +212,105 @@ namespace TheBox.Games
         /// <param name="e">The <see cref="T:System.Windows.Input.KeyEventArgs" /> instance containing the event data.</param>
         public void HandleKeyDown(object sender, KeyEventArgs e)
         {
-            // backspace
             if (e.Key == Key.Back)
             {
                 PageModel.GetInstance.NavigateBackwards();
                 GameControlModel.GetInstance.CurrentGameImage = null;
             }
-
-            // up
+            
             if (e.Key == Key.Up)
             {
-                PageModel.GetInstance.MoveUp();
-                PageModel.GetInstance.BindItems(true);
+                bool paginate = PageModel.GetInstance.MoveUp();
+                PageModel.GetInstance.BindItems(paginate);
                 PageModel.GetInstance.UpdatePaginationLabels();
 
                 if (PageModel.GetInstance.SelectedMenuItemModel.FilePath == null)
                 {
-                    ShowSystemImage();
+                    //ShowSystemImage();
                 }
                 else
                 {
-                    GameImageModel.GetInstance.ShowGameImage(true);
+                    //GameImageModel.GetInstance.ShowGameImage(true);
                 }
             }
 
-            // down
             if (e.Key == Key.Down)
             {
-                PageModel.GetInstance.MoveDown();
-                PageModel.GetInstance.BindItems(true);
+                bool paginate = PageModel.GetInstance.MoveDown();
+                PageModel.GetInstance.BindItems(paginate);
                 PageModel.GetInstance.UpdatePaginationLabels();
 
                 if (PageModel.GetInstance.SelectedMenuItemModel.FilePath == null)
                 {
-                    ShowSystemImage();
+                   //ShowSystemImage();
                 }
                 else
                 {
-                    GameImageModel.GetInstance.ShowGameImage(true);
+                    //GameImageModel.GetInstance.ShowGameImage(true);
                 }
             }
 
-            // left
             if (e.Key == Key.Left)
             {
-                MenuItemModel selectedItemModel = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
-                if (selectedItemModel.FilePath != null)
-                {
-                    // select the previuos image from bing
-                    string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
-                    string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
-
-                    if (!GameImageModel.GetInstance.ImageOffsets.ContainsKey(consoleName + "_" + gameName))
-                    {
-                        // no need to do anything
-                        return;                    
-                    }
-
-                    if (GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName] > 0)
-                    {
-                        GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName]--;
-                        GameImageModel.GetInstance.SaveImageOffsets();
-                        GameImageModel.GetInstance.ShowGameImage(false);
-                    }
-                }
+                bool paginate = PageModel.GetInstance.MoveLeft();
+                PageModel.GetInstance.BindItems(paginate);
+                PageModel.GetInstance.UpdatePaginationLabels();
             }
 
-            // right
             if (e.Key == Key.Right)
             {
-                MenuItemModel selectedItemModel = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
-                if (selectedItemModel.FilePath != null)
-                {
-                    // select the next image from bing
-                    string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
-                    string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
-
-                    if (!GameImageModel.GetInstance.ImageOffsets.ContainsKey(consoleName + "_" + gameName))
-                    {
-                        GameImageModel.GetInstance.ImageOffsets.Add(consoleName + "_" + gameName, 1);
-                    }
-                    else
-                    {
-                        GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName]++;
-                    }
-                    GameImageModel.GetInstance.SaveImageOffsets();
-                    GameImageModel.GetInstance.ShowGameImage(false);
-                }
+                bool paginate = PageModel.GetInstance.MoveRight();
+                PageModel.GetInstance.BindItems(paginate);
+                PageModel.GetInstance.UpdatePaginationLabels();
             }
+
+            //// left
+            //if (e.Key == Key.Left)
+            //{
+            //    MenuItemModel selectedItemModel = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
+            //    if (selectedItemModel.FilePath != null)
+            //    {
+            //        // select the previuos image from bing
+            //        string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
+            //        string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
+
+            //        if (!GameImageModel.GetInstance.ImageOffsets.ContainsKey(consoleName + "_" + gameName))
+            //        {
+            //            // no need to do anything
+            //            return;                    
+            //        }
+
+            //        if (GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName] > 0)
+            //        {
+            //            GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName]--;
+            //            GameImageModel.GetInstance.SaveImageOffsets();
+            //            GameImageModel.GetInstance.ShowGameImage(false);
+            //        }
+            //    }
+            //}
+
+            //// right
+            //if (e.Key == Key.Right)
+            //{
+            //    MenuItemModel selectedItemModel = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
+            //    if (selectedItemModel.FilePath != null)
+            //    {
+            //        // select the next image from bing
+            //        string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
+            //        string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
+
+            //        if (!GameImageModel.GetInstance.ImageOffsets.ContainsKey(consoleName + "_" + gameName))
+            //        {
+            //            GameImageModel.GetInstance.ImageOffsets.Add(consoleName + "_" + gameName, 1);
+            //        }
+            //        else
+            //        {
+            //            GameImageModel.GetInstance.ImageOffsets[consoleName + "_" + gameName]++;
+            //        }
+            //        GameImageModel.GetInstance.SaveImageOffsets();
+            //        GameImageModel.GetInstance.ShowGameImage(false);
+            //    }
+            //}
 
             // enter
             if (e.Key == Key.Enter)
@@ -327,11 +339,11 @@ namespace TheBox.Games
         /// <summary>
         /// Shows the system image.
         /// </summary>
-        private void ShowSystemImage()
-        {
-            // Show the game system image
-            GameControlModel.GetInstance.CurrentEmulatorImage = ((EmulatorSetting)PageModel.GetInstance.SelectedMenuItemModel.Tag).ConsoleImagePath;
-        }
+        //private void ShowSystemImage()
+        //{
+        //    // Show the game system image
+        //    GameControlModel.GetInstance.CurrentEmulatorImage = ((EmulatorSetting)PageModel.GetInstance.SelectedMenuItemModel.Tag).ConsoleImagePath;
+        //}
 
         /// <summary>
         /// Navigates to roms.
@@ -352,18 +364,26 @@ namespace TheBox.Games
 
                 foreach (string file in files)
                 {
+                    // Does file have tile image?
+                    string tilePath = GetImage(file, setting.EmulatatedSystemName);
+
                     menuItems.Add(new MenuItemModel()
                     {
                         DisplayText = System.IO.Path.GetFileNameWithoutExtension(file),
                         ParentSelected = true,
                         FilePath = file,
+                        TileFilePath = string.IsNullOrEmpty(tilePath) ? "" : System.IO.Path.GetFullPath(tilePath),
                         RelayCommand = new RelayCommand(() =>
                         {
                             string consoleName = PageModel.GetInstance.MenuEntityModels[0].SelectedMenuItemModel.DisplayText.RemoveCommas();
                             string gameName = PageModel.GetInstance.SelectedMenuItemModel.DisplayText.RemoveCommas();
 
                             // navigate to game options modal
-                            ModalModel.GetInstance.ModalUserControl = new GameOptionsModal(consoleName + "_" +  gameName, () => { RunEmulator(setting, file); } );
+                            ModalModel.GetInstance.ModalUserControl = new GameOptionsModal(
+                                $"{consoleName}_{gameName}", 
+                                () => {
+                                    RunEmulator(setting, file);
+                                });
                         })
                     });
                 }
@@ -380,6 +400,31 @@ namespace TheBox.Games
 
             // navigate to new menu
             PageModel.GetInstance.NavigateForwards(menuItems, 2, 5);
+        }
+
+        private string GetImage(string fileOrDir, string emulatedSystemName)
+        {
+            string fileName = System.IO.Path.GetFileNameWithoutExtension(fileOrDir);
+            string png = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), fileName + ".png");
+            string jpg = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), fileName + ".jpg");
+
+            if (File.Exists(png))
+                return png;
+
+            if (File.Exists(jpg))
+                return jpg;
+
+            fileName = System.IO.Path.GetFileNameWithoutExtension($"{emulatedSystemName}_{fileOrDir}");
+            png = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), fileName + ".png");
+            jpg = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), fileName + ".jpg");
+
+            if (File.Exists(png))
+                return png;
+
+            if (File.Exists(jpg))
+                return jpg;
+
+            return string.Empty;
         }
 
         /// <summary>
