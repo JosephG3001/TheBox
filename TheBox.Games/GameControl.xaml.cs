@@ -414,9 +414,8 @@ namespace TheBox.Games
             if (File.Exists(jpg))
                 return jpg;
 
-            fileName = System.IO.Path.GetFileNameWithoutExtension($"{emulatedSystemName}_{fileOrDir}");
-            png = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), fileName + ".png");
-            jpg = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), fileName + ".jpg");
+            png = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), $"{emulatedSystemName}_{fileName}" + ".png");
+            jpg = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), $"{emulatedSystemName}_{fileName}" + ".jpg");
 
             if (File.Exists(png))
                 return png;
