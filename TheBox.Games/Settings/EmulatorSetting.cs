@@ -31,6 +31,12 @@ namespace TheBox.Games.Settings
         [XmlElement("EmulatorPath")]
         public string EmulatorPath;
 
+        [XmlElement("GridRows")]
+        public int GridRows;
+
+        [XmlElement("GridColumns")]
+        public int GridColumns;
+
         [XmlElement("WinKawaks")]
         public bool WinKawaks;
     }

@@ -24,6 +24,8 @@ namespace TheBox.Games
     /// </summary>
     public partial class EmulatorSettingModal : UserControl, IBoxKeyboardControl
     {
+        public IEnumerable<int> GridRange => Enumerable.Range(1, 20);
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EmulatorSettingModal"/> class.
         /// </summary>
@@ -31,11 +33,16 @@ namespace TheBox.Games
         {
             InitializeComponent();
 
+            DataContext = this;
+
             // check the text of the selected page menu button.  If it is not "Add New Emulator" then get the setting
             if (GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList != null)
             {
                 string selectedButtonText = PageModel.GetInstance.SelectedMenuItemModel.DisplayText;
-                EmulatorSetting setting = GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList.Where(m => m.EmulatatedSystemName == selectedButtonText).FirstOrDefault();
+
+                var setting = GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList
+                    .Where(m => m.EmulatatedSystemName == selectedButtonText)
+                    .FirstOrDefault();
 
                 if (setting != null)
                 {
@@ -47,10 +54,15 @@ namespace TheBox.Games
                         txtSystemName.Text = setting.EmulatatedSystemName;
                         txtFileExt.Text = setting.FileExt;
                         txtEmulatorPath.Text = setting.EmulatorPath;
+                        RowsDD.SelectedValue = setting.GridRows;
+                        ColumnsDD.SelectedValue = setting.GridColumns;
+
                         chkWinKawaks.IsChecked = setting.WinKawaks;
                     }
                     catch (Exception)
                     {
+                        RowsDD.SelectedValue = 3;
+                        ColumnsDD.SelectedValue = 5;
                         chkWinKawaks.IsChecked = false;
                     }
                 }
@@ -75,14 +87,14 @@ namespace TheBox.Games
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             // get settings as a list
-            List<EmulatorSetting> settings = new List<EmulatorSetting>();
+            var settings = new List<EmulatorSetting>();
 
             if (GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList != null)
             {
                 settings = GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList.ToList();
             }
 
-            EmulatorSetting setting = new EmulatorSetting();
+            var setting = new EmulatorSetting();
 
             // try to get the existing emulator setting
             if (settings.Count > 0)
@@ -109,6 +121,8 @@ namespace TheBox.Games
             setting.RomPath = txtRomPath.Text;
             setting.FileExt = txtFileExt.Text;
             setting.EmulatorPath = txtEmulatorPath.Text;
+            setting.GridColumns = Convert.ToInt32(ColumnsDD.SelectedValue);
+            setting.GridRows = Convert.ToInt32(RowsDD.SelectedValue);
             setting.WinKawaks = chkWinKawaks.IsChecked.Value;
 
             // convert the settings back to array sorted by system name
@@ -140,7 +154,9 @@ namespace TheBox.Games
             List<EmulatorSetting> settings = GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList.ToList();
 
             // get the setting to be deleted
-            EmulatorSetting setting = settings.Where(m => m.EmulatatedSystemName.ToLower() == txtSystemName.Text.ToLower()).FirstOrDefault();
+            var setting = settings
+                .Where(m => m.EmulatatedSystemName.ToLower() == txtSystemName.Text.ToLower())
+                .FirstOrDefault();
 
             if (setting == null)
             {

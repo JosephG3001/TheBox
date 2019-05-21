@@ -98,10 +98,11 @@ namespace TheBox.Common.Menu
         /// </summary>
         public bool MoveUp()
         {
-            if (FullRowCount == 0)
-            {
+            if (FullRowCount == 0)            
                 return false;
-            }
+            
+            if (FullRowCount == 1 && GridColumns == ItemCount)
+                return false;
 
             //we are at the start of the list on the first row, go the end
             if (CurrentPageButtonIndex < GridColumns && PageIndex == 0)
@@ -165,8 +166,16 @@ namespace TheBox.Common.Menu
                 if (CurrentPageButtonIndex >= FullRowsInLastPage * GridColumns)
                 {
                     int indexOnRow = CurrentPageButtonIndex - (Math.Max(FullRowsInLastPage, 1) * GridColumns);
+                    int oldPageIndex = PageIndex;
+
+                    if (indexOnRow > GridColumns)
+                        indexOnRow -= GridColumns;
+
                     PageIndex = 0;
                     CurrentPageButtonIndex = Math.Max(indexOnRow, 0);
+
+                    if (oldPageIndex == 0)
+                        return false;
                 }
                 else
                 {

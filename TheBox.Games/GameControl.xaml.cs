@@ -96,13 +96,19 @@ namespace TheBox.Games
             // ** display list of emulators
 
             // new list of menuitems
-            List<MenuItemModel> menuItems = new List<MenuItemModel>();
+            var menuItems = new List<MenuItemModel>();
 
             // get configured list of emulators
-            List<EmulatorSetting> settings = GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList.ToList();
+            var settings = GameControlModel.GetInstance.GameSettingsManager.EmulatorSettings.EmulatorSettingList.ToList();
 
             foreach (EmulatorSetting setting in settings)
             {
+                if (setting.GridColumns == 0)
+                    setting.GridColumns = 5;
+
+                if (setting.GridRows == 0)
+                    setting.GridRows = 3;
+
                 menuItems.Add(new MenuItemModel()
                 {
                     DisplayText = setting.EmulatatedSystemName,
@@ -399,7 +405,11 @@ namespace TheBox.Games
             }
 
             // navigate to new menu
-            PageModel.GetInstance.NavigateForwards(menuItems, 2, 5);
+            PageModel.GetInstance.NavigateForwards(
+                menuItems, 
+                setting.GridRows,
+                setting.GridColumns
+                );
         }
 
         private string GetImage(string fileOrDir, string emulatedSystemName)
