@@ -16,7 +16,8 @@
     <Grid Visibility="{Binding PlayOptionsVisible, Converter={StaticResource BoolToCollapseConverter}}" >
         <ListView Background="Transparent" Grid.Column="0" ItemsSource="{Binding PlayOptionsMenu.MenuItemModels}"
                       HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch" >
+                      VerticalAlignment="Stretch" 
+                       BorderThickness="0">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <UI:IBoxMenuButton Content="{Binding DisplayText}" 

@@ -46,13 +46,13 @@ namespace TheBox.Common.Models
 
 
         public event EventHandler NoMoreMenuEntities;
-        public event EventHandler NavigatedForwards;
-        public event EventHandler NavigatedBackwards;
-        public event EventHandler Moved;
-        public event EventHandler MovedUp;
-        public event EventHandler MovedDown;
-        public event EventHandler MovedLeft;
-        public event EventHandler MovedRight;
+        //public event EventHandler NavigatedForwards;
+        //public event EventHandler NavigatedBackwards;
+        //public event EventHandler Moved;
+        //public event EventHandler MovedUp;
+        //public event EventHandler MovedDown;
+        //public event EventHandler MovedLeft;
+        //public event EventHandler MovedRight;
 
         /// <summary>
         /// The _bread crumbs
@@ -208,6 +208,7 @@ namespace TheBox.Common.Models
                     VisibleMenuItemModels[index].ParentSelected = menuItem.ParentSelected;
                     VisibleMenuItemModels[index].RelayCommand.action = menuItem.RelayCommand.action;
                     VisibleMenuItemModels[index].FilePath = menuItem.FilePath;
+                    VisibleMenuItemModels[index].FullScreenBackgroundImagePath = menuItem.FullScreenBackgroundImagePath;
 
                     index++;
                 }
@@ -241,8 +242,8 @@ namespace TheBox.Common.Models
             // update view
             BindItems(true);
 
-            NavigatedForwards?.Invoke(this, EventArgs.Empty);
-            Moved?.Invoke(this, EventArgs.Empty);
+            //NavigatedForwards?.Invoke(this, EventArgs.Empty);
+            //Moved?.Invoke(this, EventArgs.Empty);
 
             UpdatePaginationLabels();
         }
@@ -264,8 +265,8 @@ namespace TheBox.Common.Models
                 ClearPaginationLabels();
             }
 
-            NavigatedBackwards?.Invoke(this, EventArgs.Empty);
-            Moved?.Invoke(this, EventArgs.Empty);
+            //NavigatedBackwards?.Invoke(this, EventArgs.Empty);
+            //Moved?.Invoke(this, EventArgs.Empty);
 
             UpdatePaginationLabels();
         }
@@ -276,8 +277,8 @@ namespace TheBox.Common.Models
         public bool MoveUp()
         {
             bool paginationOccured = MenuEntityModel.MoveUp();
-            MovedUp?.Invoke(this, EventArgs.Empty);
-            Moved?.Invoke(this, EventArgs.Empty);
+            //MovedUp?.Invoke(this, EventArgs.Empty);
+            //Moved?.Invoke(this, EventArgs.Empty);
             return paginationOccured;
         }
 
@@ -287,8 +288,8 @@ namespace TheBox.Common.Models
         public bool MoveDown()
         {
             bool paginationOccured = MenuEntityModel.MoveDown();
-            MovedDown?.Invoke(this, EventArgs.Empty);
-            Moved?.Invoke(this, EventArgs.Empty);
+            //MovedDown?.Invoke(this, EventArgs.Empty);
+            //Moved?.Invoke(this, EventArgs.Empty);
             return paginationOccured;
         }
 
@@ -298,8 +299,8 @@ namespace TheBox.Common.Models
         public bool MoveLeft()
         {
             bool paginationOccured = MenuEntityModel.MoveLeft();
-            MovedLeft?.Invoke(this, EventArgs.Empty);
-            Moved?.Invoke(this, EventArgs.Empty);
+            //MovedLeft?.Invoke(this, EventArgs.Empty);
+            //Moved?.Invoke(this, EventArgs.Empty);
             return paginationOccured;
         }
 
@@ -309,8 +310,8 @@ namespace TheBox.Common.Models
         public bool MoveRight()
         {
             bool paginationOccured = MenuEntityModel.MoveRight();
-            MovedRight?.Invoke(this, EventArgs.Empty);
-            Moved?.Invoke(this, EventArgs.Empty);
+            //MovedRight?.Invoke(this, EventArgs.Empty);
+            //Moved?.Invoke(this, EventArgs.Empty);
             return paginationOccured;
         }
 

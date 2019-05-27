@@ -137,6 +137,9 @@ namespace TheBox.Movies
             // fix WMP crash - don't show it until the window has finished rendering
             MediaPlayerModel.GetInstance.MediaPlayer.uiMode = "none";
             mediaPlayerGrid.Visibility = Visibility.Visible;
+
+            MenuItemModel selectedItemModel = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
+            MainUIModel.Instance.SetBackGroundImage(selectedItemModel.FullScreenBackgroundImagePath, BackgroundImageUri);
         }
 
         /// <summary>
@@ -157,8 +160,9 @@ namespace TheBox.Movies
                 {
                     string fileName = System.IO.Path.GetFileNameWithoutExtension(file);
 
-                    // Does file have tile image?
-                    string tilePath = GetImage(file, true);
+                    // Does file have tile image or background image?
+                    string tilePath = GetImage(file, true, false);
+                    string backGroundPath = GetImage(file, true, true);
 
                     // Create the video file menu item
                     menuItems.Add(new MenuItemModel()
@@ -167,6 +171,7 @@ namespace TheBox.Movies
                         ParentSelected = true,
                         FilePath = file,
                         TileFilePath = string.IsNullOrEmpty(tilePath) ? "" : System.IO.Path.GetFullPath(tilePath),
+                        FullScreenBackgroundImagePath = string.IsNullOrEmpty(backGroundPath) ? "" : System.IO.Path.GetFullPath(backGroundPath),
                         RelayCommand = new RelayCommand(() =>
                         {
                             // move focus to the mini playpanel
@@ -181,7 +186,8 @@ namespace TheBox.Movies
             foreach (var folder in Directory.GetDirectories(dir))
             {
                 // Does folder have tile image?
-                string tilePath = GetImage(folder, false);
+                string tilePath = GetImage(folder, false, false);
+                string backGroundPath = GetImage(folder, false, true);
 
                 // Create the child folder menu item
                 menuItems.Add(new MenuItemModel()
@@ -189,6 +195,7 @@ namespace TheBox.Movies
                     DisplayText = new DirectoryInfo(folder).Name,
                     ParentSelected = true,
                     TileFilePath = string.IsNullOrEmpty(tilePath) ? "" : System.IO.Path.GetFullPath(tilePath),
+                    FullScreenBackgroundImagePath = string.IsNullOrEmpty(backGroundPath) ? "" : System.IO.Path.GetFullPath(backGroundPath),
                     RelayCommand = new RelayCommand(() =>
                     {
                         // directory so run this method again using the child directory as the parameter
@@ -230,11 +237,11 @@ namespace TheBox.Movies
             PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);
         }
 
-        private string GetImage(string fileOrDir, bool isFile)
+        private string GetImage(string fileOrDir, bool isFile, bool fullScreenBackground)
         {
             if (isFile)
             {
-                string fileName = System.IO.Path.GetFileNameWithoutExtension(fileOrDir);
+                string fileName = System.IO.Path.GetFileNameWithoutExtension(fileOrDir) + (fullScreenBackground ? "_background" : "");
                 string png = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), fileName + ".png");
                 string jpg = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileOrDir), fileName + ".jpg");
                 if (File.Exists(png)) return png;
@@ -242,6 +249,9 @@ namespace TheBox.Movies
             }
             else
             {
+                if (fullScreenBackground)
+                    fileOrDir += "_background";
+
                 string png = fileOrDir + ".png";
                 string jpg = fileOrDir + ".jpg";
                 if (File.Exists(png)) return png;
@@ -334,42 +344,27 @@ namespace TheBox.Movies
             {
                 PageModel.GetInstance.NavigateBackwards();
                 MediaPlayerModel.GetInstance.PreviewMedia(true);
+                MenuItemModel selectedItemModel = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
+                MainUIModel.Instance.SetBackGroundImage(selectedItemModel.FullScreenBackgroundImagePath, BackgroundImageUri);
             }
 
-            // up
-            if (e.Key == Key.Up)
+            // Arrows
+            var arrows = new Key[] { Key.Up, Key.Down, Key.Left, Key.Right };
+            if (arrows.Contains( e.Key))
             {
-                bool paginationOccured = PageModel.GetInstance.MoveUp();
+                bool paginationOccured = false; 
+                switch (e.Key)
+                {
+                    case Key.Up: paginationOccured = PageModel.GetInstance.MoveUp(); break;
+                    case Key.Down: paginationOccured = PageModel.GetInstance.MoveDown(); break;
+                    case Key.Left: paginationOccured = PageModel.GetInstance.MoveLeft(); break;
+                    case Key.Right: paginationOccured = PageModel.GetInstance.MoveRight(); break;
+                }
                 PageModel.GetInstance.BindItems(paginationOccured);
                 PageModel.GetInstance.UpdatePaginationLabels();
                 MediaPlayerModel.GetInstance.PreviewMedia(false);
-            }
-
-            // down
-            if (e.Key == Key.Down)
-            {
-                bool paginationOccured = PageModel.GetInstance.MoveDown();
-                PageModel.GetInstance.BindItems(paginationOccured);
-                PageModel.GetInstance.UpdatePaginationLabels();
-                MediaPlayerModel.GetInstance.PreviewMedia(false);
-            }
-
-            // left
-            if (e.Key == Key.Left)
-            {
-                bool paginationOccured = PageModel.GetInstance.MoveLeft();
-                PageModel.GetInstance.BindItems(paginationOccured);
-                PageModel.GetInstance.UpdatePaginationLabels();
-                MediaPlayerModel.GetInstance.PreviewMedia(false);
-            }
-
-            // right
-            if (e.Key == Key.Right)
-            {
-                bool paginationOccured = PageModel.GetInstance.MoveRight();
-                PageModel.GetInstance.BindItems(paginationOccured);
-                PageModel.GetInstance.UpdatePaginationLabels();
-                MediaPlayerModel.GetInstance.PreviewMedia(false);
+                MenuItemModel selectedItemModel = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
+                MainUIModel.Instance.SetBackGroundImage(selectedItemModel.FullScreenBackgroundImagePath, BackgroundImageUri);
             }
 
             // enter
@@ -386,8 +381,8 @@ namespace TheBox.Movies
                 {
                     // go to the next sub folder
                     PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First().RelayCommand.Execute(null);
-
                     MediaPlayerModel.GetInstance.PreviewMedia(false);
+                    MainUIModel.Instance.SetBackGroundImage(selectedItemModel.FullScreenBackgroundImagePath, BackgroundImageUri);
                 }
             }
             PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);

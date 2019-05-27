@@ -111,6 +111,8 @@ namespace TheBox.Common.Menu
 
         public string TileFilePath { get; set; }
 
+        public string FullScreenBackgroundImagePath { get; set; }
+
         /// <summary>
         /// Gets or sets the file path for videos, roms ect.
         /// </summary>

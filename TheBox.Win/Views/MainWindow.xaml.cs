@@ -29,7 +29,6 @@ namespace TheBox.Win
     /// </summary>
     public partial class MainWindow : Window
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -248,11 +247,14 @@ namespace TheBox.Win
         private void SetBackGroundImage()
         {
             var vm = MainWindowModel.GetInstance.TopMenuItemModels.Where(m => m.IsSelected).Single();
-            BitmapImage logo = new BitmapImage();
-            logo.BeginInit();
-            logo.UriSource = new Uri(vm.BackgroundImageUri, uriKind: UriKind.RelativeOrAbsolute);
-            logo.EndInit();
-            MainUIModel.Instance.BackgroundImageSource = logo;
+            if (!string.IsNullOrEmpty(vm.BackgroundImageUri))
+            {
+                BitmapImage logo = new BitmapImage();
+                logo.BeginInit();
+                logo.UriSource = new Uri(vm.BackgroundImageUri, uriKind: UriKind.RelativeOrAbsolute);
+                logo.EndInit();
+                MainUIModel.Instance.BackgroundImageSource = logo;
+            }
         }
 
         [DllImport("User32.dll")]

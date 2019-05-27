@@ -55,17 +55,17 @@
         </Grid.ColumnDefinitions>
 
         
-        <Image Grid.ColumnSpan="10"
-               Grid.RowSpan="10"
+        <Image Grid.ColumnSpan="1000"
+               Grid.RowSpan="1000"
                Stretch="Fill"
                Source="{Binding MainUIModel.BackgroundImageSource}"></Image>
         <Grid Grid.ColumnSpan="10"
               Grid.RowSpan="10"
-              Opacity="0.77"
+              Opacity="0.60"
               Background="Black"></Grid>
         
 
-        <Grid Background="#8F000000">
+        <Grid Background="#6F000000">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition Height="5*"></RowDefinition>

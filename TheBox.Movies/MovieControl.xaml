@@ -21,7 +21,7 @@
     </UserControl.Resources>
 
 
-    <Grid>
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="6*"></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -40,25 +40,44 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            
+
             <Grid Grid.Column="0"
-                  Grid.ColumnSpan="3"   
-                  Grid.Row="2"
-                  Margin="10"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Bottom">
-                <Viewbox>
-                    <local:PlayPanelControl x:Name="PlayPanel"></local:PlayPanelControl>
-                </Viewbox>
-            </Grid>
+                  Grid.ColumnSpan="3"
+                  Grid.Row="0"
+                  Grid.RowSpan="3"
+                  Margin="0,0,-2,0">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="1,0" 
+                                     StartPoint="0,0"
+                                     >
+                        <GradientStop Color="#6F000000" Offset="0.8"/>
+                        <GradientStop Color="Black" Offset="0.93"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="1"
+                      Margin="5"
+                      Background="Transparent"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Bottom">
+                    <Viewbox>
+                        <local:PlayPanelControl x:Name="PlayPanel"></local:PlayPanelControl>
+                    </Viewbox>
+                </Grid>
+            </Grid>            
+           
 
             <Grid Grid.RowSpan="5"
-                  Grid.Column="2"
-                  Grid.ColumnSpan="3"
+                  Grid.Column="3"
+                  Grid.ColumnSpan="1"
                   x:Name="mediaPlayerGrid" 
                   Background="Black" 
-                  Visibility="Hidden"
-                  Margin="10,0,0,5">
+                  Visibility="Hidden">
             </Grid>
         </Grid>
 
