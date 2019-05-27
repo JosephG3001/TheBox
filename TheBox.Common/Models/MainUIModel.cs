@@ -78,13 +78,6 @@ namespace TheBox.Common.Models
                 CurrentBackgroundImageUri = backupImage;
                 return;
             }
-
-            //if (previousBackgroundImageSource != null)
-            //{
-            //    backgroundImageSource = previousBackgroundImageSource;
-
-            //    previousBackgroundImageSource = null;
-            //}
         }
     }
 }

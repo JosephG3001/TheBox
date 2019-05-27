@@ -200,6 +200,8 @@ namespace TheBox.Movies
                     {
                         // directory so run this method again using the child directory as the parameter
                         GetMenuItemsForDirectory(folder, false);
+                        MenuItemModel vm = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
+                        MainUIModel.Instance.SetBackGroundImage(vm.FullScreenBackgroundImagePath, BackgroundImageUri);
                     })
                 });
             }
@@ -380,9 +382,9 @@ namespace TheBox.Movies
                 else
                 {
                     // go to the next sub folder
-                    PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First().RelayCommand.Execute(null);
+                    MenuItemModel vm = PageModel.GetInstance.VisibleMenuItemModels.Where(m => m.IsSelected).First();
+                    vm.RelayCommand.Execute(null);
                     MediaPlayerModel.GetInstance.PreviewMedia(false);
-                    MainUIModel.Instance.SetBackGroundImage(selectedItemModel.FullScreenBackgroundImagePath, BackgroundImageUri);
                 }
             }
             PageModel.GetInstance.DoBreadCrumbs(this.ComponentName);

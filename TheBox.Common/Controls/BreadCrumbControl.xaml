@@ -7,13 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     
-    <Grid HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Margin="10,10,10,0" >
-        <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center">
-            <TextBlock 
-                       Text="{Binding BreadCumbs}" 
-                       Foreground="White" 
-                       HorizontalAlignment="Stretch" 
-                       VerticalAlignment="Center" />
+    <Grid HorizontalAlignment="Stretch" 
+          VerticalAlignment="Bottom" 
+          Grid.Row="0" 
+          Margin="20,0" >
+        <Viewbox HorizontalAlignment="Left" 
+                 VerticalAlignment="Bottom">
+            <TextBlock Text="{Binding BreadCumbs}" 
+                       Margin="0,5"
+                       Foreground="White"
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Bottom" />
             <!--FontFamily="Consolas"-->
         </Viewbox>
     </Grid>

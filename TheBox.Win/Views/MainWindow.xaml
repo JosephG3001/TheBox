@@ -61,7 +61,7 @@
                Source="{Binding MainUIModel.BackgroundImageSource}"></Image>
         <Grid Grid.ColumnSpan="10"
               Grid.RowSpan="10"
-              Opacity="0.60"
+              Opacity="0.50"
               Background="Black"></Grid>
         
 
