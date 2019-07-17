@@ -19,6 +19,7 @@ using TheBox.Common.Models;
 using TheBox.Games.Models;
 using TheBox.Games.Settings;
 using System.IO;
+using System.Threading;
 
 namespace TheBox.Games.Modals
 {
@@ -36,6 +37,8 @@ namespace TheBox.Games.Modals
         /// The _action
         /// </summary>
         private Action _action;
+
+        private bool _blockEmulatorLaunch = false;
 
         /// <summary>
         /// Gets or sets the game options menu.
@@ -122,7 +125,15 @@ namespace TheBox.Games.Modals
                 switch (GameOptionsMenu.SelectedMenuItemModel.DisplayText)
                 {
                     case "Play":
-                        _action();
+                        if (!_blockEmulatorLaunch)
+                        {
+                            Task.Run(() => {
+                                Thread.Sleep(5000);
+                                _blockEmulatorLaunch = false;
+                            });
+                            _blockEmulatorLaunch = true;
+                            _action();
+                        }
                         break;
                     case "Save Current Cover":
                         SaveCurrentImage();
